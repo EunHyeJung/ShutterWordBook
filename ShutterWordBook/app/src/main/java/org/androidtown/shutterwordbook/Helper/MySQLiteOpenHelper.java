@@ -20,6 +20,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Dictionary.db";
     private static final String PACKAGE_DIR = "/data/data/org.androidtown.shutterwordbook/databases";
 
+    File file = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
     private boolean existsDB = false;
 
     public MySQLiteOpenHelper(Context context) {
@@ -30,8 +31,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     public void initialize(Context context) {
 
-        File file = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
-        if(file.exists()) {
+      if(file.exists()) {
             existsDB = true;
         }
         else {
@@ -41,7 +41,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     public boolean isExistDB() {
-        return existsDB;
+        return file.exists();
     }
 
     @Override

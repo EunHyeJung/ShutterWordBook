@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import org.androidtown.shutterwordbook.R;
 import org.androidtown.shutterwordbook.Helper.*;
+import org.androidtown.shutterwordbook.Activity.*;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private TextView textMean;  // 사전의미
 
     // List
-    private ArrayList<String> words;
+ //   private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
@@ -45,7 +46,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     public DictionaryFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,11 +63,17 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         textMean = (TextView) rootView.findViewById(R.id.textView_meaning);
 
         // 초기화
-        words = new ArrayList<String>();
+     //   words = new ArrayList<String>();
         mHelper = new MySQLiteOpenHelper(getActivity());
 
         // list
-        initListView();
+   //     initListView();
+
+        // adapter
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+
+        // adapter연결
+        listWord.setAdapter(adapter);
 
         // 리스너 등록
         buttonSearch.setOnClickListener((View.OnClickListener) this);
@@ -84,7 +90,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     }
 
     // listview 초기화
-    public void initListView() {
+ /*   public void initListView() {
         // data
         Log.i("z", "initListView");
 
@@ -105,7 +111,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         // adapter연결
         listWord.setAdapter(adapter);
 //        wordList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
