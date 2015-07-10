@@ -2,6 +2,7 @@ package org.androidtown.shutterwordbook.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,19 +22,35 @@ import java.util.ArrayList;
  */
 public class StartActivity extends Activity {
 
-    // DB 초기화
+    // DB
     private MySQLiteOpenHelper mHelper;
-    // DB관련
-    SQLiteDatabase db;
+    private SQLiteDatabase db;
+    private boolean existDB;
 
     // List
     private static ArrayList<String> words;
-
     public static ArrayList<String> getWords() {
         return words;
     }
+
    // private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
+
+    private static SharedPreferences hasDatabase;
+
+    /*
+    *
+
+SharedPreferences prefs = getSharedPreferences( (Stirng)Preferences_name , MODE_PRIVATE);
+SharedPreferences.Editor ed = prefs.edit();
+ed.putString( (Stirng)key , value ); // value : 저장될 값,
+ed.putInt( (Stirng)key , value );
+ed.commit(); // 필수! 이것을 안해주면 저장이 안되요!
+
+    *
+    * */
+
+
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -49,14 +66,26 @@ public class StartActivity extends Activity {
         // list
         initListView();
 
-        if(mHelper.isExistDB()) {
-            Toast.makeText(getApplicationContext(), R.string.text_db_ready, Toast.LENGTH_LONG).show();
-            Intent in = new Intent(StartActivity.this, MainActivity.class);
-            startActivity(in);
-            finish();
-        }
-    }
+        hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
+        hasDatabase.getBoolean("exists", existDB);
 
+        if(existDB) {
+            Toast.makeText(getApplicationContext(), "이미있음", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"초기화", Toast.LENGTH_LONG).show();
+            existDB = mHelper.copyDB();
+            Log.i("db", ""+existDB);
+            //existDB = true;
+            SharedPreferences.Editor ed = hasDatabase.edit();
+            ed.putBoolean("exists", existDB);
+            ed.commit();
+        }
+
+        Intent in = new Intent(StartActivity.this, MainActivity.class);
+        startActivity(in);
+        finish();
+    }
 
     // listview 초기화
     public void initListView() {
@@ -75,4 +104,33 @@ public class StartActivity extends Activity {
         }
     }
 
+    // 값 불러오기
+    private void getPreferences(){
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        pref.getString("hi", "");
+    }
+
+    // 값 저장하기
+    private void savePreferences(String key, String value){
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    // 값(Key Data) 삭제하기
+    private void removePreferences(String key){
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove(key);
+        editor.commit();
+    }
+
+    // 값(ALL Data) 삭제하기
+    private void removeAllPreferences(){
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

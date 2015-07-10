@@ -1,6 +1,7 @@
 package org.androidtown.shutterwordbook.Helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -20,15 +21,17 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Dictionary.db";
     private static final String PACKAGE_DIR = "/data/data/org.androidtown.shutterwordbook/databases";
 
-    File file = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
-    private boolean existsDB = false;
+   // File file = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
+    //private boolean existsDB = false;
+
+    Context mContext;
 
     public MySQLiteOpenHelper(Context context) {
        // super(context, "Dictionary.db", null, 1);
         super(context, PACKAGE_DIR+"/"+DATABASE_NAME, null, 1);
-        initialize(context);
+        mContext = context;
     }
-
+/*
     public void initialize(Context context) {
 
       if(file.exists()) {
@@ -40,10 +43,15 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean initDB() {
+        copyDB(mContext);
+        return true;
+    }
+
     public boolean isExistDB() {
         return file.exists();
     }
-
+*/
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -58,7 +66,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void copyDB(Context context) {
+    public boolean copyDB() {
         File folder = new File(PACKAGE_DIR);
         File outfile = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
 
@@ -72,7 +80,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
         // ������ ��� ��쿡�� ��
         if(outfile.length() <= 0) {
-            AssetManager assetManager = context.getResources().getAssets();
+            AssetManager assetManager = mContext.getResources().getAssets();
             try {
                 // ���� ����.
                 InputStream inStream = assetManager.open(DATABASE_NAME);
@@ -96,14 +104,16 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return false;
                 }
 
 
             }
             catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
         }
-
+        return true;
     }
 }
