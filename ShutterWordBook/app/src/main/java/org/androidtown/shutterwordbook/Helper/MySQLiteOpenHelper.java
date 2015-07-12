@@ -79,7 +79,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         BufferedOutputStream bufferedOutputStream = null;
 
         // ������ ��� ��쿡�� ��
-        if(outfile.length() <= 0) {
+//        if(outfile.length() <= 0) {
             AssetManager assetManager = mContext.getResources().getAssets();
             try {
                 // ���� ����.
@@ -113,7 +113,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
                 return false;
             }
-        }
+        //}
         return true;
     }
 }

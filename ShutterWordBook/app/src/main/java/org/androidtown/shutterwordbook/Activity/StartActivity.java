@@ -47,6 +47,7 @@ public class StartActivity extends Activity {
         // 초기화
         words = new ArrayList<String>();
         mHelper = new MySQLiteOpenHelper(this);
+        mHelper.copyDB();
 
         // list
         initListView();
@@ -67,7 +68,6 @@ public class StartActivity extends Activity {
             ed.commit();
         }*/
 
-        mHelper.copyDB();
         Intent in = new Intent(StartActivity.this, MainActivity.class);
         startActivity(in);
         finish();
