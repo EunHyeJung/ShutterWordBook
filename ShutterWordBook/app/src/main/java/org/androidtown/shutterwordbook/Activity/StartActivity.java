@@ -36,7 +36,8 @@ public class StartActivity extends Activity {
    // private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
-//    private static SharedPreferences hasDatabase;
+    private SharedPreferences hasDatabase;
+    boolean existsDB;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,16 @@ public class StartActivity extends Activity {
         // 초기화
         words = new ArrayList<String>();
         mHelper = new MySQLiteOpenHelper(this);
-        mHelper.copyDB();
+
+        hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
+        hasDatabase.getBoolean("exists", existsDB);
+
+        if(existsDB==false) {
+            mHelper.copyDB();
+            SharedPreferences.Editor editor = hasDatabase.edit();
+            editor.putBoolean("exists", true);
+            editor.commit();
+        }
 
         // list
         initListView();
