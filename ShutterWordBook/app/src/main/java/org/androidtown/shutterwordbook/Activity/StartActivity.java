@@ -36,22 +36,7 @@ public class StartActivity extends Activity {
    // private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
-    private static SharedPreferences hasDatabase;
-
-    /*
-    *
-
-SharedPreferences prefs = getSharedPreferences( (Stirng)Preferences_name , MODE_PRIVATE);
-SharedPreferences.Editor ed = prefs.edit();
-ed.putString( (Stirng)key , value ); // value : 저장될 값,
-ed.putInt( (Stirng)key , value );
-ed.commit(); // 필수! 이것을 안해주면 저장이 안되요!
-
-    *
-    * */
-
-
-
+//    private static SharedPreferences hasDatabase;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +50,9 @@ ed.commit(); // 필수! 이것을 안해주면 저장이 안되요!
 
         // list
         initListView();
-
-        hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
-        hasDatabase.getBoolean("exists", existDB);
+/*
+ //       hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
+ //       hasDatabase.getBoolean("exists", existDB);
 
         if(existDB) {
             Toast.makeText(getApplicationContext(), "이미있음", Toast.LENGTH_LONG).show();
@@ -80,8 +65,9 @@ ed.commit(); // 필수! 이것을 안해주면 저장이 안되요!
             SharedPreferences.Editor ed = hasDatabase.edit();
             ed.putBoolean("exists", existDB);
             ed.commit();
-        }
+        }*/
 
+        mHelper.copyDB();
         Intent in = new Intent(StartActivity.this, MainActivity.class);
         startActivity(in);
         finish();
