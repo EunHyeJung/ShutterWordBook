@@ -7,11 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Helper.MySQLiteOpenHelper;
 import org.androidtown.shutterwordbook.R;
 
@@ -25,38 +23,45 @@ public class StartActivity extends Activity {
     // DB
     private MySQLiteOpenHelper mHelper;
     private SQLiteDatabase db;
-    private boolean existDB;
 
     // List
     private static ArrayList<String> words;
+
     public static ArrayList<String> getWords() {
         return words;
     }
 
-   // private ArrayAdapter<String> adapter;
+    // private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
     private SharedPreferences hasDatabase;
-    boolean existsDB;
+    private boolean existDB;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        listWord = (ListView)findViewById(R.id.listView_words);
+        listWord = (ListView) findViewById(R.id.listView_words);
 
         // 초기화
         words = new ArrayList<String>();
         mHelper = new MySQLiteOpenHelper(this);
 
-        hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
-        hasDatabase.getBoolean("exists", existsDB);
+        hasDatabase = getApplicationContext().getSharedPreferences("db", MODE_PRIVATE);
+        existDB = hasDatabase.getBoolean("exists", false);    // default : false
+//        Toast.makeText(getApplicationContext(), "pref:" + existDB, Toast.LENGTH_LONG).show();
 
-        if(existsDB==false) {
+        if (existDB != true) {
+            Toast.makeText(getApplicationContext(), "데이터베이스를 불러오고 있습니다", Toast.LENGTH_LONG).show();
             mHelper.copyDB();
+            existDB = true;
             SharedPreferences.Editor editor = hasDatabase.edit();
             editor.putBoolean("exists", true);
-            editor.commit();
+            editor.apply();
+
+//            boolean test = hasDatabase.getBoolean("exists", false);
+//            Toast.makeText(getApplicationContext(), "test:" + test, Toast.LENGTH_LONG).show();
+
         }
 
         // list
@@ -77,6 +82,7 @@ public class StartActivity extends Activity {
             ed.putBoolean("exists", existDB);
             ed.commit();
         }*/
+        Toast.makeText(getApplicationContext(), "데이터베이스를 불러오는데에 성공하였습니다", Toast.LENGTH_LONG).show();
 
         Intent in = new Intent(StartActivity.this, MainActivity.class);
         startActivity(in);
@@ -98,35 +104,5 @@ public class StartActivity extends Activity {
             String word = cursor.getString(0);
             words.add(word);
         }
-    }
-
-    // 값 불러오기
-    private void getPreferences(){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        pref.getString("hi", "");
-    }
-
-    // 값 저장하기
-    private void savePreferences(String key, String value){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    // 값(Key Data) 삭제하기
-    private void removePreferences(String key){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.remove(key);
-        editor.commit();
-    }
-
-    // 값(ALL Data) 삭제하기
-    private void removeAllPreferences(){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.commit();
     }
 }
