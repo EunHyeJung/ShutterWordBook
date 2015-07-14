@@ -40,7 +40,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private TextView textWord;  // 사전에서 보여주는 단어
 
     // List
- //   private ArrayList<String> words;
+    private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
@@ -89,7 +89,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
    //     initListView();
 
         // adapter
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+      adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
 
         // adapter연결
         listWord.setAdapter(adapter);
@@ -103,7 +103,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         listWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String toFind = parent.getItemAtPosition(position).toString();
+                toFind = parent.getItemAtPosition(position).toString();
                 textWord.setText(toFind);
                 search(toFind, false);
             }

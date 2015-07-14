@@ -31,7 +31,9 @@ public class StartActivity extends Activity {
         return words;
     }
 
-    // private ArrayAdapter<String> adapter;
+    // private Array
+    //
+    // \<String> adapter;
     private ListView listWord;  // 단어리스트
 
     private SharedPreferences hasDatabase;
