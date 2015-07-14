@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,13 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     // 발음
     TextToSpeech tts;
     boolean ttsActive = false;
+
+    // 단어 찾기
+    String toFind="null";
+    String result="null";
+
+    // 단어 사전 확장
+    FragmentTransaction fragementTransaction;
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -101,6 +109,21 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             }
         });
 
+        //
+
+            fragementTransaction = getFragmentManager().beginTransaction();
+
+                textWord.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
+                        fragementTransaction.addToBackStack(null);
+                        fragementTransaction.commit();
+                    }
+                });
+
+
+
         return rootView;
     }
 
@@ -133,7 +156,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         switch(v.getId()) {
             case R.id.button_search :
-                String toFind = editWord.getText().toString();
+                toFind = editWord.getText().toString();
                 search(toFind, true);
                 break;
 
@@ -159,7 +182,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         int _id = cursor.getInt(0);
         String word = cursor.getString(1);
-        String result = cursor.getString(2);
+       result = cursor.getString(2);
 
         if(result.length()==0) {
             textMean.setText("not found");
@@ -213,6 +236,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             Toast.makeText(getActivity(), R.string.text_tts_error,Toast.LENGTH_SHORT).show();
             buttonSpeak.setEnabled(false);
         }
+
+//////////////////////////////////////////////////////////////
+
+
     }
 
     @Override
