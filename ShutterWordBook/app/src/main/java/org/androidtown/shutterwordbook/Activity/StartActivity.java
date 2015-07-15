@@ -26,14 +26,10 @@ public class StartActivity extends Activity {
 
     // List
     private static ArrayList<String> words;
-
     public static ArrayList<String> getWords() {
         return words;
     }
 
-    // private Array
-    //
-    // \<String> adapter;
     private ListView listWord;  // 단어리스트
 
     private SharedPreferences hasDatabase;
@@ -63,27 +59,11 @@ public class StartActivity extends Activity {
 
 //            boolean test = hasDatabase.getBoolean("exists", false);
 //            Toast.makeText(getApplicationContext(), "test:" + test, Toast.LENGTH_LONG).show();
-
         }
 
         // list
         initListView();
-/*
- //       hasDatabase = getSharedPreferences("db", MODE_PRIVATE);
- //       hasDatabase.getBoolean("exists", existDB);
 
-        if(existDB) {
-            Toast.makeText(getApplicationContext(), "이미있음", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(),"초기화", Toast.LENGTH_LONG).show();
-            existDB = mHelper.copyDB();
-            Log.i("db", ""+existDB);
-            //existDB = true;
-            SharedPreferences.Editor ed = hasDatabase.edit();
-            ed.putBoolean("exists", existDB);
-            ed.commit();
-        }*/
         Toast.makeText(getApplicationContext(), "데이터베이스를 불러오는데에 성공하였습니다", Toast.LENGTH_LONG).show();
 
         Intent in = new Intent(StartActivity.this, MainActivity.class);
