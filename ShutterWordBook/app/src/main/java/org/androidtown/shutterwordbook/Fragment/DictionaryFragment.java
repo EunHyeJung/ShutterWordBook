@@ -178,19 +178,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         String sql = "SELECT * from Dictionary where word like \"" + toFind + "%\"";
         cursor = db.rawQuery(sql, null);
 
-<<<<<<< HEAD
-        cursor.moveToFirst();
-
-        int _id = cursor.getInt(0);
-        String word = cursor.getString(1);
-       result = cursor.getString(2);
-
-        if(result.length()==0) {
-            textMean.setText("not found");
-=======
         if(cursor.getCount()==0) {
             Toast.makeText(getActivity(), "찾는 단어가 존재하지 않습니다", Toast.LENGTH_LONG).show();
->>>>>>> feature/database
+
         }
         else {
             cursor.moveToFirst();
@@ -246,9 +236,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             Toast.makeText(getActivity(), R.string.text_tts_error,Toast.LENGTH_SHORT).show();
             buttonSpeak.setEnabled(false);
         }
-
-//////////////////////////////////////////////////////////////
-
 
     }
 
