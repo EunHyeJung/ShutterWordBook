@@ -18,5 +18,13 @@
         </activity>
 
         <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name=".Activity.LockScreenActivity"></activity>
+
+        <service android:name=".Helper.ScreenService"/>
+        <receiver android:name=".Helper.ScreenReceiver"/>
     </application>
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
 </manifest>

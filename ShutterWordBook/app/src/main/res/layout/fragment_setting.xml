@@ -25,9 +25,9 @@
 
 
         <CheckBox
+            android:id="@+id/checkBox_lockscreen"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:id="@+id/checkBox1"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="190dp"
             />
