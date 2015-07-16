@@ -71,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:background="#BAD6EB"
                 android:textColor="#333333"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1" />
 
             <LinearLayout
@@ -78,23 +79,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="#FFFFFF"
+
                 android:layout_weight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:background="#ffff7a29"
+                    android:background="#FFFFFF"
+                    android:layout_marginTop="5dp"
                     android:weightSum="4">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text=""
                         android:layout_weight="3"
                         android:id="@+id/textView_word"
                         android:clickable="true"
+                        android:layout_marginLeft="3dp"
                         android:layout_gravity="center_vertical"/>
 
                     <Button
@@ -106,19 +109,28 @@
                         android:drawableRight="@drawable/icon_speak_resize"/>
 
                 </LinearLayout>
-                <ScrollView
+                <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@drawable/dict_img01"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/imageView" />
+
+                    <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
                     android:id="@+id/scrollView"
                     android:layout_weight="1" >
                 <TextView
                     android:id="@+id/textView_meaning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ca449ae0"
-                    android:text=""
+                    android:background="#FFFFFF"
+                    android:layout_marginLeft="3dp"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
                     </ScrollView>
+
+
             </LinearLayout>
 
 
