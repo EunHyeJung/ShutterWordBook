@@ -1,9 +1,11 @@
 package org.androidtown.shutterwordbook.Fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 
@@ -89,7 +91,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
    //     initListView();
 
         // adapter
-      adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+       adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
 
         // adapter연결
         listWord.setAdapter(adapter);
@@ -167,6 +169,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
             case R.id.button_camera :
                 Toast.makeText(getActivity(), "camera_button", Toast.LENGTH_LONG).show();
+                camera();
                 break;
 
             case R.id.button_speak :
@@ -201,6 +204,12 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
         cursor.close();
         mHelper.close();
+    }
+
+    //camera 버튼 눌렀을 때
+    public void camera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(cameraIntent);
     }
 
     // tts
