@@ -18,17 +18,27 @@
 
             <TextView
                 android:id="@+id/textView_word"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#ffffa4bb"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="25dp"
+                android:textColor="#ff393939"
+                android:background="#FFFFFF"
+                android:layout_marginTop="10dp"
                 />
-
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/dict_img02"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/imageView" />
             <TextView
                 android:id="@+id/textView_meaning"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="#FFFFFF"
                 android:layout_marginTop="10dp"
-                android:background="#ffffbc3b"
                 />
 
         </LinearLayout>

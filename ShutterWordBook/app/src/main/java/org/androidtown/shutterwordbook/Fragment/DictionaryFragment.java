@@ -1,8 +1,14 @@
 package org.androidtown.shutterwordbook.Fragment;
 
+<<<<<<< HEAD
+=======
+
+import android.content.Intent;
+>>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 
@@ -88,7 +94,11 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         //     initListView();
 
         // adapter
+<<<<<<< HEAD
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+=======
+       adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+>>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
 
         // adapter연결
         listWord.setAdapter(adapter);
@@ -118,11 +128,29 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 String word = textWord.getText().toString();
                 String mean = textMean.getText().toString();
 
+<<<<<<< HEAD
                 fragementTransaction.replace(R.id.first_page, new WordmeanFragment(word, mean));
                 fragementTransaction.addToBackStack(null);
 
             }
         });
+=======
+    //        fragementTransaction = getFragmentManager().beginTransaction();
+
+                textWord.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fragementTransaction = getFragmentManager().beginTransaction();
+                        search(toFind, true);
+                        fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
+                        System.out.println(result);
+                        fragementTransaction.addToBackStack(null);
+
+                        fragementTransaction.commit();
+
+                    }
+                });
+>>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
 
 
 
@@ -159,6 +187,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
             case R.id.button_camera :
                 Toast.makeText(getActivity(), "camera_button", Toast.LENGTH_LONG).show();
+                camera();
                 break;
 
             case R.id.button_speak :
@@ -184,7 +213,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
             int _id = cursor.getInt(0);
             String word = cursor.getString(1);
-            String result = cursor.getString(2);
+           result = cursor.getString(2);
 
             if(move)
                 listWord.setSelection(_id -1);
@@ -193,6 +222,12 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
         cursor.close();
         mHelper.close();
+    }
+
+    //camera 버튼 눌렀을 때
+    public void camera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(cameraIntent);
     }
 
     // tts
