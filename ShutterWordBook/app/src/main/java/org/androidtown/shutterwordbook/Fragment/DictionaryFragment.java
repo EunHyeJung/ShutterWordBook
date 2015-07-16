@@ -111,14 +111,19 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         //
 
-            fragementTransaction = getFragmentManager().beginTransaction();
+    //        fragementTransaction = getFragmentManager().beginTransaction();
 
                 textWord.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        fragementTransaction = getFragmentManager().beginTransaction();
+                        search(toFind, true);
                         fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
+                        System.out.println(result);
                         fragementTransaction.addToBackStack(null);
+
                         fragementTransaction.commit();
+
                     }
                 });
 
@@ -187,7 +192,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
             int _id = cursor.getInt(0);
             String word = cursor.getString(1);
-            String result = cursor.getString(2);
+           result = cursor.getString(2);
 
             if(move)
                 listWord.setSelection(_id -1);
