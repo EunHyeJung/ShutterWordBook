@@ -1,6 +1,5 @@
 package org.androidtown.shutterwordbook.Fragment;
 
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -80,16 +79,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         textWord = (TextView) rootView.findViewById(R.id.textView_word);
 
         // 초기화
-     //   words = new ArrayList<String>();
+        //   words = new ArrayList<String>();
         mHelper = new MySQLiteOpenHelper(getActivity());
         tts = new TextToSpeech(getActivity(), this);
         buttonSearch.setEnabled(true);
 
         // list
-   //     initListView();
+        //     initListView();
 
         // adapter
-      adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
 
         // adapter연결
         listWord.setAdapter(adapter);
@@ -109,18 +108,21 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        //
+        fragementTransaction = getFragmentManager().beginTransaction();
+        fragementTransaction.commit();
 
-            fragementTransaction = getFragmentManager().beginTransaction();
+        textWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                textWord.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
-                        fragementTransaction.addToBackStack(null);
-                        fragementTransaction.commit();
-                    }
-                });
+                String word = textWord.getText().toString();
+                String mean = textMean.getText().toString();
+
+                fragementTransaction.replace(R.id.first_page, new WordmeanFragment(word, mean));
+                fragementTransaction.addToBackStack(null);
+
+            }
+        });
 
 
 
@@ -131,21 +133,16 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
  /*   public void initListView() {
         // data
         Log.i("z", "initListView");
-
         db = mHelper.getReadableDatabase();
         Cursor cursor;
-
         String sql = "SELECT word from Dictionary";
         cursor = db.rawQuery(sql, null);
-
         while (cursor.moveToNext()) {
             String word = cursor.getString(0);
             words.add(word);
         }
-
         // adapter
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, words);
-
         // adapter연결
         listWord.setAdapter(adapter);
 //        wordList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
