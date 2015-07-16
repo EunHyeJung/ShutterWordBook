@@ -1,5 +1,6 @@
 package org.androidtown.shutterwordbook.Fragment;
 
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,6 +92,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         // adapter
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
+
         // adapter연결
         listWord.setAdapter(adapter);
 
@@ -109,32 +111,26 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        fragementTransaction = getFragmentManager().beginTransaction();
-        fragementTransaction.commit();
+        //
+
+        //        fragementTransaction = getFragmentManager().beginTransaction();
 
         textWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fragementTransaction = getFragmentManager().beginTransaction();
+                search(toFind, true);
+                fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
+                System.out.println(result);
+                fragementTransaction.addToBackStack(null);
 
-                String word = textWord.getText().toString();
-                String mean = textMean.getText().toString();
-                //        fragementTransaction = getFragmentManager().beginTransaction();
+                fragementTransaction.commit();
 
-                textWord.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fragementTransaction = getFragmentManager().beginTransaction();
-                        search(toFind, true);
-                        fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
-                        System.out.println(result);
-                        fragementTransaction.addToBackStack(null);
-
-                        fragementTransaction.commit();
-
-                    }
-                });
             }
         });
+
+
+
         return rootView;
     }
 
@@ -194,7 +190,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
             int _id = cursor.getInt(0);
             String word = cursor.getString(1);
-           result = cursor.getString(2);
+            result = cursor.getString(2);
 
             if(move)
                 listWord.setSelection(_id -1);
