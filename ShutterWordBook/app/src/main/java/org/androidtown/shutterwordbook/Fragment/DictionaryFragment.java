@@ -1,10 +1,6 @@
 package org.androidtown.shutterwordbook.Fragment;
 
-<<<<<<< HEAD
-=======
-
 import android.content.Intent;
->>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -94,12 +90,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         //     initListView();
 
         // adapter
-<<<<<<< HEAD
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
-=======
-       adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
->>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
-
         // adapter연결
         listWord.setAdapter(adapter);
 
@@ -127,15 +118,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
                 String word = textWord.getText().toString();
                 String mean = textMean.getText().toString();
-
-<<<<<<< HEAD
-                fragementTransaction.replace(R.id.first_page, new WordmeanFragment(word, mean));
-                fragementTransaction.addToBackStack(null);
-
-            }
-        });
-=======
-    //        fragementTransaction = getFragmentManager().beginTransaction();
+                //        fragementTransaction = getFragmentManager().beginTransaction();
 
                 textWord.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -150,10 +133,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
                     }
                 });
->>>>>>> 65781465ba8c58b40743b1a783fe84cb5c2f9b39
-
-
-
+            }
+        });
         return rootView;
     }
 
