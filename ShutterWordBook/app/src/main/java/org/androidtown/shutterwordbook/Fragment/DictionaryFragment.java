@@ -4,13 +4,13 @@ package org.androidtown.shutterwordbook.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,10 @@ import org.androidtown.shutterwordbook.R;
 import org.androidtown.shutterwordbook.Helper.*;
 import org.androidtown.shutterwordbook.Activity.*;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -33,6 +37,11 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class DictionaryFragment extends Fragment implements View.OnClickListener, TextToSpeech.OnInitListener {
+    // DB
+    private static String DB_PATH = "/sdcard/";
+    private static String DB_NAME = "dictionary.sqlite";
+    private int listCount = 0;
+    private String[] wordList = null;
 
     private Button buttonSearch;
     private Button buttonCamera;
@@ -47,8 +56,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private ListView listWord;  // 단어리스트
 
     // DB관련
-    SQLiteDatabase db;
-    MySQLiteOpenHelper mHelper;
+    private SQLiteDatabase db;
+    Dictionary mHelper;
 
     // 발음
     TextToSpeech tts;
@@ -64,6 +73,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     public DictionaryFragment() {
         // Required empty public constructor
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +95,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         // 초기화
         //   words = new ArrayList<String>();
-        mHelper = new MySQLiteOpenHelper(getActivity());
+        mHelper = new Dictionary(getActivity());
         tts = new TextToSpeech(getActivity(), this);
         buttonSearch.setEnabled(true);
 
@@ -111,9 +123,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        //
-
-        //        fragementTransaction = getFragmentManager().beginTransaction();
 
         textWord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,24 +143,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
-    // listview 초기화
- /*   public void initListView() {
-        // data
-        Log.i("z", "initListView");
-        db = mHelper.getReadableDatabase();
-        Cursor cursor;
-        String sql = "SELECT word from Dictionary";
-        cursor = db.rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            String word = cursor.getString(0);
-            words.add(word);
-        }
-        // adapter
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, words);
-        // adapter연결
-        listWord.setAdapter(adapter);
-//        wordList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }*/
 
     @Override
     public void onClick(View v) {
