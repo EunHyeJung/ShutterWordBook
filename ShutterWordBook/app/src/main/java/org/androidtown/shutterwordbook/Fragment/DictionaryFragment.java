@@ -4,7 +4,6 @@ package org.androidtown.shutterwordbook.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
@@ -58,7 +57,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     // DB관련
     private SQLiteDatabase db;
-    Dictionary mHelper;
+    DictionaryOpenHelper mHelper;
 
     // 발음
     TextToSpeech tts;
@@ -96,7 +95,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         // 초기화
         //   words = new ArrayList<String>();
-        mHelper = new Dictionary(getActivity());
+        mHelper = new DictionaryOpenHelper(getActivity());
         tts = new TextToSpeech(getActivity(), this);
         buttonSearch.setEnabled(true);
 

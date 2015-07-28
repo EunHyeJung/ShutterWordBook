@@ -1,6 +1,8 @@
 package org.androidtown.shutterwordbook.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -104,6 +106,7 @@ public class StartActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        words = new ArrayList<String>();
 /*
         words = new ArrayList<String>();
         handler = new Handler();
@@ -163,16 +166,29 @@ public class StartActivity extends FragmentActivity {
 
         Thread thread1 = new Thread(new Runnable() {
             public void run() {
-                DictionaryOpenHelper dbHelper = new DictionaryOpenHelper(StartActivity.this);
-                dbHelper.copyDB();
-                Log.d("StartActivityyyy", "dbHepler");
 
+                ////db가 없는 경우에만, 최초실행인 경우에만 ///
+
+                SharedPreferences pref = getSharedPreferences("db", Context.MODE_PRIVATE);
+                Boolean existDB = pref.getBoolean("copyDB", false); // copyDB를 한 적 있는지 확인
+
+                if(existDB == false) {
+
+                    DictionaryOpenHelper dbHelper = new DictionaryOpenHelper(StartActivity.this);
+                    dbHelper.copyDB();
+                    Log.d("StartActivityyyy", "copyDB Thread");
+
+                    // copyDB 설정 변경
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("copyDB", true);
+                    editor.commit();
+                }
                 // listView에 add
                 initListView();
             }
         });
 
-        
+
         thread1.start();
         Log.d("StartActivityyyy", "run");
 
@@ -191,7 +207,6 @@ public class StartActivity extends FragmentActivity {
             String sql = "SELECT word from Dictionary";
 
             cursor = db.rawQuery(sql, null);
-            words = new ArrayList<String>();
 
             while (cursor.moveToNext()) {
                 String word = cursor.getString(0);
