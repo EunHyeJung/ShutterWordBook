@@ -10,19 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
-        android:gravity="center"
         android:background="@color/abc_search_url_text_normal"
+        android:gravity="center"
         android:text="잠금화면 테스트"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
+        android:id="@+id/button_lock_ok"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_gravity="center|bottom"
         android:layout_weight="1"
-        android:text="OK"
-        android:id="@+id/button_lock_ok"
-        android:background="@color/abc_background_cache_hint_selector_material_light"
-        android:layout_gravity="center|bottom" />
-
+        android:text="OK" />
 
 </LinearLayout>
