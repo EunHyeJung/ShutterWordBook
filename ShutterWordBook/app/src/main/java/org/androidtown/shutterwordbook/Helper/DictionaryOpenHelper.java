@@ -3,8 +3,13 @@ package org.androidtown.shutterwordbook.Helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.ListView;
+
+import org.androidtown.shutterwordbook.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,11 +17,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2015-07-06.
  */
-public class Dictionary extends SQLiteOpenHelper {
+public class DictionaryOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Dictionary.db";
     private static final String PACKAGE_DIR = "/data/data/org.androidtown.shutterwordbook/databases";
@@ -26,7 +32,7 @@ public class Dictionary extends SQLiteOpenHelper {
 
     Context mContext;
 
-    public Dictionary(Context context) {
+    public DictionaryOpenHelper(Context context) {
        // super(context, "Dictionary.db", null, 1);
         super(context, PACKAGE_DIR+"/"+DATABASE_NAME, null, 1);
         mContext = context;
@@ -106,8 +112,6 @@ public class Dictionary extends SQLiteOpenHelper {
                     e.printStackTrace();
                     return false;
                 }
-
-
             }
             catch (IOException e) {
                 e.printStackTrace();

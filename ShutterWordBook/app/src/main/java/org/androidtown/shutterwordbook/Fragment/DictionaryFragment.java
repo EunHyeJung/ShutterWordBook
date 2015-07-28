@@ -11,6 +11,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,11 +116,18 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         // 리스트를 눌렀을 때
         listWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toFind = parent.getItemAtPosition(position).toString();
-                textWord.setText(toFind);
-                search(toFind, false);
+                try {
+                    Log.d("MyDicFrag", "click");
+                    toFind = parent.getItemAtPosition(position).toString();
+                    textWord.setText(toFind);
+                    search(toFind, false);
+
+                } catch (Exception e){
+                    Log.d("MyDicFrag", "click error " + e.toString());
+                }
             }
         });
 
