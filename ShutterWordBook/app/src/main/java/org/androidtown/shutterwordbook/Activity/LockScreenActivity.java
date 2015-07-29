@@ -1,6 +1,5 @@
 package org.androidtown.shutterwordbook.Activity;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +8,6 @@ import android.widget.Button;
 
 import org.androidtown.shutterwordbook.R;
 
-/**
- * Created by lab on 15. 7. 15..
- */
 public class LockScreenActivity extends Activity {
 
     private Button buttonOk;

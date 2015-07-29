@@ -1,6 +1,5 @@
 package org.androidtown.shutterwordbook.Fragment;
 
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,20 +20,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.androidtown.shutterwordbook.Activity.StartActivity;
+import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
-import org.androidtown.shutterwordbook.Helper.*;
-import org.androidtown.shutterwordbook.Activity.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DictionaryFragment extends Fragment implements View.OnClickListener, TextToSpeech.OnInitListener {
     // DB
     private static String DB_PATH = "/sdcard/";
@@ -46,36 +37,33 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private Button buttonSearch;
     private Button buttonCamera;
     private Button buttonSpeak;
-    private EditText editWord;  // ì…ë ¥í•œ ë‹¨ì–´
-    private TextView textMean;  // ì‚¬ì „ì˜ë¯¸
-    private TextView textWord;  // ì‚¬ì „ì—ì„œ ë³´ì—¬ì£¼ëŠ” ë‹¨ì–´
+    private EditText editWord;  // ÀÔ·ÂÇÑ ´Ü¾î
+    private TextView textMean;  // »çÀüÀÇ¹Ì
+    private TextView textWord;  // »çÀü¿¡¼­ º¸¿©ÁÖ´Â ´Ü¾î
 
     // List
     private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
-    private ListView listWord;  // ë‹¨ì–´ë¦¬ìŠ¤íŠ¸
+    private ListView listWord;  // ´Ü¾î¸®½ºÆ®
 
-    // DBê´€ë ¨
+    // DB°ü·Ã
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper;
 
-    // ë°œìŒ
+    // ¹ßÀ½
     TextToSpeech tts;
     boolean ttsActive = false;
 
-    // ë‹¨ì–´ ì°¾ê¸°
+    // ´Ü¾î Ã£±â
     String toFind="null";
     String result="null";
 
-    // ë‹¨ì–´ ì‚¬ì „ í™•ì¥
+    // ´Ü¾î »çÀü È®Àå
     FragmentTransaction fragementTransaction;
 
     public DictionaryFragment() {
         // Required empty public constructor
     }
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,7 +72,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         View rootView =  inflater.inflate(R.layout.fragment_dictionary, container, false);
 
-        // ë ˆì´ì•„ì›ƒ ì—°ê²°
+        // ·¹ÀÌ¾Æ¿ô ¿¬°á
         buttonCamera = (Button) rootView.findViewById(R.id.button_camera);
         buttonSearch = (Button) rootView.findViewById(R.id.button_search);
         buttonSpeak = (Button) rootView.findViewById(R.id.button_speak);
@@ -93,7 +81,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         textMean = (TextView) rootView.findViewById(R.id.textView_meaning);
         textWord = (TextView) rootView.findViewById(R.id.textView_word);
 
-        // ì´ˆê¸°í™”
+        // ÃÊ±âÈ­
         //   words = new ArrayList<String>();
         mHelper = new DictionaryOpenHelper(getActivity());
         tts = new TextToSpeech(getActivity(), this);
@@ -105,15 +93,15 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         // adapter
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
 
-        // adapterì—°ê²°
+        // adapter¿¬°á
         listWord.setAdapter(adapter);
 
-        // ë¦¬ìŠ¤ë„ˆ ë“±ë¡
+        // ¸®½º³Ê µî·Ï
         buttonSearch.setOnClickListener((View.OnClickListener) this);
         buttonCamera.setOnClickListener((View.OnClickListener) this);
         buttonSpeak.setOnClickListener((View.OnClickListener) this);
 
-        // ë¦¬ìŠ¤íŠ¸ë¥¼ ëˆŒë €ì„ ë•Œ
+        // ¸®½ºÆ®¸¦ ´­·¶À» ¶§
         listWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -171,7 +159,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    // ê²€ìƒ‰ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
+    // °Ë»ö¹öÆ° ´­·¶À» ¶§
     public void search(String toFind, Boolean move) {
         db = mHelper.getReadableDatabase();
         Cursor cursor;
@@ -180,7 +168,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         cursor = db.rawQuery(sql, null);
 
         if(cursor.getCount()==0) {
-            Toast.makeText(getActivity(), "ì°¾ëŠ” ë‹¨ì–´ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Ã£´Â ´Ü¾î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù", Toast.LENGTH_LONG).show();
 
         }
         else {
@@ -199,7 +187,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mHelper.close();
     }
 
-    //camera ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
+    //camera ¹öÆ° ´­·¶À» ¶§
     public void camera(){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivity(cameraIntent);
@@ -208,10 +196,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     // tts
     public void speak() {
 
-        // ì½ì„ ë‹¨ì–´ë¥¼ ê°€ì ¸ì˜¨ë‹¤. ì˜¤ë¥¸ìª½ í™”ë©´ì—ì„œ ê°€ì ¸ì˜´.
+        // ÀĞÀ» ´Ü¾î¸¦ °¡Á®¿Â´Ù. ¿À¸¥ÂÊ È­¸é¿¡¼­ °¡Á®¿È.
         String toSpeak = textWord.getText().toString();
 
-        // queueë¥¼ ë¹„ìš°ê³  ì§€ì •í•œ ë‹¨ì–´ë¥¼ ë°œìŒì„ í•˜ê²Œ í•œë‹¤
+        // queue¸¦ ºñ¿ì°í ÁöÁ¤ÇÑ ´Ü¾î¸¦ ¹ßÀ½À» ÇÏ°Ô ÇÑ´Ù
         tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -219,17 +207,17 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     @Override
     public void onInit(int status) {
 
-        // ttsê°€ ê°€ëŠ¥í•œ ê²½ìš°
+        // tts°¡ °¡´ÉÇÑ °æ¿ì
         if(status == TextToSpeech.SUCCESS) {
             buttonSearch.setEnabled(true);
 
             String toSpeak = textWord.getText().toString();
 
-            int result = tts.setLanguage(Locale.US); // ì–¸ì–´ì„¤ì •. ë¯¸êµ­, ì˜êµ­,í˜¸ì£¼ ë“± ë‹¤ì–‘í•œ ë°œìŒ ì œê³µ ê°€ëŠ¥í•  ë“¯
-            // setPitch() - ë°œìŒì˜ ë†’ë‚®ì´
-            // setSpeechRate() - ë°œìŒ ì†ë„
+            int result = tts.setLanguage(Locale.US); // ¾ğ¾î¼³Á¤. ¹Ì±¹, ¿µ±¹,È£ÁÖ µî ´Ù¾çÇÑ ¹ßÀ½ Á¦°ø °¡´ÉÇÒ µí
+            // setPitch() - ¹ßÀ½ÀÇ ³ô³·ÀÌ
+            // setSpeechRate() - ¹ßÀ½ ¼Óµµ
 
-            // ë°ì´í„°ê°€ ì—†ê±°ë‚˜ ì§€ì›í•˜ì§€ ì•ŠëŠ” ê²½ìš°
+            // µ¥ÀÌÅÍ°¡ ¾ø°Å³ª Áö¿øÇÏÁö ¾Ê´Â °æ¿ì
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
 
@@ -248,7 +236,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        // ttsë¥¼ ê¼­ ì¢…ë£Œì‹œì¼œì•¼í•¨!!!
+        // tts¸¦ ²À Á¾·á½ÃÄÑ¾ßÇÔ!!!
         if (tts != null) {
             tts.stop();
             tts.shutdown();
