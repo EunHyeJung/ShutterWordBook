@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,9 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.androidtown.shutterwordbook.Activity.MainActivity;
 import org.androidtown.shutterwordbook.Activity.StartActivity;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
@@ -37,28 +40,28 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private Button buttonSearch;
     private Button buttonCamera;
     private Button buttonSpeak;
-    private EditText editWord;  // ÀÔ·ÂÇÑ ´Ü¾î
-    private TextView textMean;  // »çÀüÀÇ¹Ì
-    private TextView textWord;  // »çÀü¿¡¼­ º¸¿©ÁÖ´Â ´Ü¾î
+    private EditText editWord;  // ì…ë ¥í•œ ë‹¨ì–´
+    private TextView textMean;  // ì‚¬ì „ì˜ë¯¸
+    private TextView textWord;  // ì‚¬ì „ì—ì„œ ë³´ì—¬ì£¼ëŠ” ë‹¨ì–´
 
     // List
     private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
-    private ListView listWord;  // ´Ü¾î¸®½ºÆ®
+    private ListView listWord;  // ë‹¨ì–´ë¦¬ìŠ¤íŠ¸
 
-    // DB°ü·Ã
+    // DBê´€ë ¨
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper;
 
-    // ¹ßÀ½
+    // ë°œìŒ
     TextToSpeech tts;
     boolean ttsActive = false;
 
-    // ´Ü¾î Ã£±â
+    // ë‹¨ì–´ ì°¾ê¸°
     String toFind="null";
     String result="null";
 
-    // ´Ü¾î »çÀü È®Àå
+    // ë‹¨ì–´ ì‚¬ì „ í™•ì¥
     FragmentTransaction fragementTransaction;
 
     public DictionaryFragment() {
@@ -72,7 +75,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         View rootView =  inflater.inflate(R.layout.fragment_dictionary, container, false);
 
-        // ·¹ÀÌ¾Æ¿ô ¿¬°á
+        // ë ˆì´ì•„ì›ƒ ì—°ê²°
         buttonCamera = (Button) rootView.findViewById(R.id.button_camera);
         buttonSearch = (Button) rootView.findViewById(R.id.button_search);
         buttonSpeak = (Button) rootView.findViewById(R.id.button_speak);
@@ -81,7 +84,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         textMean = (TextView) rootView.findViewById(R.id.textView_meaning);
         textWord = (TextView) rootView.findViewById(R.id.textView_word);
 
-        // ÃÊ±âÈ­
+        // ì´ˆê¸°í™”
         //   words = new ArrayList<String>();
         mHelper = new DictionaryOpenHelper(getActivity());
         tts = new TextToSpeech(getActivity(), this);
@@ -93,15 +96,15 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         // adapter
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
 
-        // adapter¿¬°á
+        // adapterì—°ê²°
         listWord.setAdapter(adapter);
 
-        // ¸®½º³Ê µî·Ï
+        // ë¦¬ìŠ¤ë„ˆ ë“±ë¡
         buttonSearch.setOnClickListener((View.OnClickListener) this);
         buttonCamera.setOnClickListener((View.OnClickListener) this);
         buttonSpeak.setOnClickListener((View.OnClickListener) this);
 
-        // ¸®½ºÆ®¸¦ ´­·¶À» ¶§
+        // ë¦¬ìŠ¤íŠ¸ë¥¼ ëˆŒë €ì„ ë•Œ
         listWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -118,7 +121,41 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
             }
         });
 
+        /* End of onItemClick methd */
 
+        /* Start of setOnItemLongClickListener
+        *  í•´ë‹¹ ë‹¨ì–´ë¥¼ ê¸¸ê²Œ ëˆ„ë¥¼ ì‹œ ë‹¨ì–´ì¥ì— ë‹¨ì–´ ì¶”ê°€
+        * */
+        listWord.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // PopupMenu ê°ì²´ ìƒì„±
+                final PopupMenu popupMenu = new PopupMenu(getActivity(), view);  // Activityì—ì„œëŠ” getContext()ë‚˜ this, Fragmentì—ì„œëŠ” getActivity
+                // popupMenuì— ë“¤ì–´ê°ˆ MenuItem ì¶”ê°€
+                popupMenu.getMenuInflater().inflate(R.menu.menu_addword, popupMenu.getMenu());
+
+                //PopupMenuì˜ MenuItemì„ í´ë¦­í•˜ëŠ” ê²ƒì„ ê°ì§€í•˜ëŠ” listener ì„¤ì •
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // TODO Auto-generated method stub
+                        switch (item.getItemId()) {
+                            case R.id.addword:
+                                Toast.makeText(getActivity(), "ë‹¨ì–´ì¥ì— ë‹¨ì–´ì¶”ê°€", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                    });
+                        popupMenu.show();
+                        return false;
+            }
+        });
+        /* End of  setOnItemLongClickListener */
+
+
+        /* Start of setOnClickListener method*/
         textWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +196,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    // °Ë»ö¹öÆ° ´­·¶À» ¶§
+    // ê²€ìƒ‰ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
     public void search(String toFind, Boolean move) {
         db = mHelper.getReadableDatabase();
         Cursor cursor;
@@ -168,7 +205,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         cursor = db.rawQuery(sql, null);
 
         if(cursor.getCount()==0) {
-            Toast.makeText(getActivity(), "Ã£´Â ´Ü¾î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "ì°¾ëŠ” ë‹¨ì–´ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤", Toast.LENGTH_LONG).show();
 
         }
         else {
@@ -187,7 +224,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         mHelper.close();
     }
 
-    //camera ¹öÆ° ´­·¶À» ¶§
+    //camera ë²„íŠ¼ ëˆŒë €ì„ ë•Œ
     public void camera(){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivity(cameraIntent);
@@ -196,10 +233,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     // tts
     public void speak() {
 
-        // ÀĞÀ» ´Ü¾î¸¦ °¡Á®¿Â´Ù. ¿À¸¥ÂÊ È­¸é¿¡¼­ °¡Á®¿È.
+        // ì½ì„ ë‹¨ì–´ë¥¼ ê°€ì ¸ì˜¨ë‹¤. ì˜¤ë¥¸ìª½ í™”ë©´ì—ì„œ ê°€ì ¸ì˜´.
         String toSpeak = textWord.getText().toString();
 
-        // queue¸¦ ºñ¿ì°í ÁöÁ¤ÇÑ ´Ü¾î¸¦ ¹ßÀ½À» ÇÏ°Ô ÇÑ´Ù
+        // queueë¥¼ ë¹„ìš°ê³  ì§€ì •í•œ ë‹¨ì–´ë¥¼ ë°œìŒì„ í•˜ê²Œ í•œë‹¤
         tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
     }
 
@@ -207,17 +244,17 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     @Override
     public void onInit(int status) {
 
-        // tts°¡ °¡´ÉÇÑ °æ¿ì
+        // ttsê°€ ê°€ëŠ¥í•œ ê²½ìš°
         if(status == TextToSpeech.SUCCESS) {
             buttonSearch.setEnabled(true);
 
             String toSpeak = textWord.getText().toString();
 
-            int result = tts.setLanguage(Locale.US); // ¾ğ¾î¼³Á¤. ¹Ì±¹, ¿µ±¹,È£ÁÖ µî ´Ù¾çÇÑ ¹ßÀ½ Á¦°ø °¡´ÉÇÒ µí
-            // setPitch() - ¹ßÀ½ÀÇ ³ô³·ÀÌ
-            // setSpeechRate() - ¹ßÀ½ ¼Óµµ
+            int result = tts.setLanguage(Locale.US); // ì–¸ì–´ì„¤ì •. ë¯¸êµ­, ì˜êµ­,í˜¸ì£¼ ë“± ë‹¤ì–‘í•œ ë°œìŒ ì œê³µ ê°€ëŠ¥í•  ë“¯
+            // setPitch() - ë°œìŒì˜ ë†’ë‚®ì´
+            // setSpeechRate() - ë°œìŒ ì†ë„
 
-            // µ¥ÀÌÅÍ°¡ ¾ø°Å³ª Áö¿øÇÏÁö ¾Ê´Â °æ¿ì
+            // ë°ì´í„°ê°€ ì—†ê±°ë‚˜ ì§€ì›í•˜ì§€ ì•ŠëŠ” ê²½ìš°
             if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED) {
 
@@ -236,11 +273,14 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        // tts¸¦ ²À Á¾·á½ÃÄÑ¾ßÇÔ!!!
+        // ttsë¥¼ ê¼­ ì¢…ë£Œì‹œì¼œì•¼í•¨!!!
         if (tts != null) {
             tts.stop();
             tts.shutdown();
         }
         super.onDestroy();
     }
+
+
+
 }
