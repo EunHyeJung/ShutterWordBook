@@ -4,6 +4,7 @@ package org.androidtown.shutterwordbook.Fragment;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,17 @@ public class WordmeanFragment extends Fragment implements View.OnClickListener, 
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_wordmean, container, false);
 
+        // layout
         textWord = (TextView)rootView.findViewById(R.id.textView_word);
         textMean = (TextView)rootView.findViewById(R.id.textView_meaning);
+        buttonSpeak = (Button) rootView.findViewById(R.id.button_speak_mean_fragment);
 
+        // init
         textWord.setText(word);
         textMean.setText(mean);
+        tts = new TextToSpeech(getActivity(), this);
 
-        buttonSpeak = (Button) rootView.findViewById(R.id.button_speak_mean_fragment);
+        // listener
         buttonSpeak.setOnClickListener((View.OnClickListener) this);
 
         return rootView;
@@ -64,7 +69,7 @@ public class WordmeanFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
 
         switch(v.getId()) {
-            case R.id.button_speak :
+            case R.id.button_speak_mean_fragment :
                 speak();
                 break;
         }
@@ -75,6 +80,7 @@ public class WordmeanFragment extends Fragment implements View.OnClickListener, 
 
         // 읽을 단어를 가져온다. 오른쪽 화면에서 가져옴.
         String toSpeak = textWord.getText().toString();
+        Log.d("speak", toSpeak);
 
         // queue를 비우고 지정한 단어를 발음을 하게 한다
         tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
