@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_img01"
+    android:background="#333333"
     tools:context="org.androidtown.shutterwordbook.Fragment.SettingFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,7 +11,8 @@
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="100dp"
+        android:background="@drawable/background_img03"
+
        >
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,6 +21,7 @@
         android:orientation="horizontal"
         android:background="@drawable/setting_img01"
         android:layout_marginLeft="50dp"
+        android:layout_marginTop="100dp"
         >
 
 

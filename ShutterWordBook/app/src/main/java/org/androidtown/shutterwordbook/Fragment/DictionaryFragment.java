@@ -64,6 +64,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     // 단어 사전 확장
     FragmentTransaction fragementTransaction;
 
+    // 단어장에 단어 추가
+    boolean isWordbook;
+
     public DictionaryFragment() {
         // Required empty public constructor
     }
@@ -140,10 +143,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         // TODO Auto-generated method stub
-                        switch (item.getItemId()) {
-                            case R.id.addword:
-                                Toast.makeText(getActivity(), "단어장에 단어추가", Toast.LENGTH_SHORT).show();
-                                break;
+
+                        if(item.getItemId() == R.id.addword){
+                       //     Toast.makeText(getActivity(), "단어장에 단어추가", Toast.LENGTH_SHORT).show();
+                            showWordbookList();     // 기존에 존재하는 단어장 리스트 출력
                         }
                         return false;
                     }
@@ -174,8 +177,27 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         return rootView;
     }
+    /* End of onCreateView() */
 
 
+    /* 기존의 단어장 리스트 불러오기*/
+    public void showWordbookList(){
+
+    }
+
+    /* 새로운 단어장 생성하기 */
+    public void createWordbook(){
+
+    }
+
+    /* 선택한 단어를 단어장에 추가하기*/
+    public void addWord(){
+
+    }
+
+
+
+    /* Start of onClick */
     @Override
     public void onClick(View v) {
 
@@ -195,6 +217,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 break;
         }
     }
+
+    /* End of onClick() */
 
     // 검색버튼 눌렀을 때
     public void search(String toFind, Boolean move) {
