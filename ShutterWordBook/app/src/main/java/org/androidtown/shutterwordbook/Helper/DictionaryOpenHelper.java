@@ -37,27 +37,7 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
         super(context, PACKAGE_DIR+"/"+DATABASE_NAME, null, 1);
         mContext = context;
     }
-/*
-    public void initialize(Context context) {
 
-      if(file.exists()) {
-            existsDB = true;
-        }
-        else {
-            copyDB(context);
-            existsDB = true;
-        }
-    }
-
-    public boolean initDB() {
-        copyDB(mContext);
-        return true;
-    }
-
-    public boolean isExistDB() {
-        return file.exists();
-    }
-*/
     @Override
     public void onCreate(SQLiteDatabase db) {
 

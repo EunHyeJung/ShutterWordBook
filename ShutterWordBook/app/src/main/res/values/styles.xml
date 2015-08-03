@@ -7,4 +7,5 @@
         <item name="android:itemTextAppearance">@color/color_background</item>
     </style>
 
+
 </resources>

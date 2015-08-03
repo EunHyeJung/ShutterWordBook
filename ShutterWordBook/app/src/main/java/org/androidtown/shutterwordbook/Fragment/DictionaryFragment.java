@@ -32,10 +32,6 @@ import java.util.Locale;
 
 public class DictionaryFragment extends Fragment implements View.OnClickListener, TextToSpeech.OnInitListener {
     // DB
-    private static String DB_PATH = "/sdcard/";
-    private static String DB_NAME = "dictionary.sqlite";
-    private int listCount = 0;
-    private String[] wordList = null;
 
     private Button buttonSearch;
     private Button buttonCamera;
@@ -45,7 +41,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     private TextView textWord;  // 사전에서 보여주는 단어
 
     // List
-    private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
     private ListView listWord;  // 단어리스트
 
@@ -88,13 +83,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         textWord = (TextView) rootView.findViewById(R.id.textView_word);
 
         // 초기화
-        //   words = new ArrayList<String>();
         mHelper = new DictionaryOpenHelper(getActivity());
         tts = new TextToSpeech(getActivity(), this);
         buttonSearch.setEnabled(true);
-
-        // list
-        //     initListView();
 
         // adapter
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, StartActivity.getWords());
@@ -131,7 +122,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         * */
         listWord.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                toFind = parent.getItemAtPosition(position).toString();
+                textWord.setText(toFind);
 
                 // PopupMenu 객체 생성
                 final PopupMenu popupMenu = new PopupMenu(getActivity(), view);  // Activity에서는 getContext()나 this, Fragment에서는 getActivity
@@ -145,8 +138,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                         // TODO Auto-generated method stub
 
                         if(item.getItemId() == R.id.addword){
-                       //     Toast.makeText(getActivity(), "단어장에 단어추가", Toast.LENGTH_SHORT).show();
-                            showWordbookList();     // 기존에 존재하는 단어장 리스트 출력
+                            // 단어장에 추가 하고자 하는 단어와 뜻 찾음.
+                            search(toFind, false);
+                            showWordbookList(toFind, result);     // 기존에 존재하는 단어장 리스트 출력
                         }
                         return false;
                     }
@@ -158,7 +152,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         /* End of  setOnItemLongClickListener */
 
 
-        /* Start of setOnClickListener method*/
+        /* 단어 창을 누르면 단어 뜻 확대 */
         textWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,8 +175,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
 
     /* 기존의 단어장 리스트 불러오기*/
-    public void showWordbookList(){
+    public void showWordbookList(String word, String meaning){
 
+        // word : 추가할 단어 meaning : 추가할 단어의 뜻
     }
 
     /* 새로운 단어장 생성하기 */
