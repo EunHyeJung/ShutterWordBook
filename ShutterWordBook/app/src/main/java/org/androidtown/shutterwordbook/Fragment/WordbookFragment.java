@@ -35,7 +35,7 @@ public class WordbookFragment extends Fragment {
     private SQLiteDatabase db;
     WordbooksOpenHelper dbHelper;
 
-    private static String DB_NAME = "Wordbooks.sqlite";
+    private static String DB_NAME = "Wordbooks.db";
     private int listCount = 0;
     private String[] nameList = null;       // 단어장 이름을 담는 배열
     //
@@ -51,7 +51,7 @@ public class WordbookFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_wordbook, container, false);
         listWordbook = (ListView) rootView.findViewById(R.id.listView_wordbooks);
-
+        wordbooks = new ArrayList<String >();
        boolean isOpen = openDatabase();
         if(isOpen){
             initList();
@@ -73,37 +73,25 @@ public class WordbookFragment extends Fragment {
 
     public void initList(){
         try {
+
             db = dbHelper.getReadableDatabase();
-
-            Cursor cursor;
-            cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-
-            if (cursor.moveToFirst()) {
-                while ( !cursor.isAfterLast()) {
-                    System.out.println("DB : "+cursor.getString(0));
-                  //  Toast.makeText(Dbinput.this, "Table Name=> "+cursor.getString(0), Toast.LENGTH_LONG).show();
-                    cursor.moveToNext();
-                }
-            }
-            //       String sql = "SELECT name  from Wordbook";
-
-
-
-/*
-            cursor = db.rawQuery(sql, null);
+              String sql = "SELECT name  from Wordbooks";
+             Cursor cursor = db.rawQuery(sql, null);
+            //cursor.moveToFirst();
+            System.out.println("cursor Size "+cursor.getCount());
             while(cursor.moveToNext())
             {
                 String name = cursor.getString(0);
-                System.out.println("cursor : "+cursor.getString(1));
-                wordbooks = new ArrayList<String >();
-                wordbooks.add(name);
+                System.out.println("name : "+name);
+              wordbooks.add(name);
                 listCount++;
             }
-            System.out.println(wordbooks);
             adapter =   new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, wordbooks);
             listWordbook.setAdapter(adapter);
-*/
-
+            if(cursor != null)
+                cursor.close();
+            if(db != null)
+                db.close();
         } catch (Exception e) {
             System.out.println("에러 "+e.toString());
             Log.d("StartActivityyyy", "error in init : " + e.toString());

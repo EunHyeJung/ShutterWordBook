@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +21,7 @@ public class WordbooksOpenHelper extends SQLiteOpenHelper {
 
 
     private static final String PACKAGE_DIR = "/data/data/org.androidtown.shutterwordbook/databases";   // 로컬 db 저장
-    public static String DATABASE_NAME = "Wordbooks.sqlite";    // 로컬 db명
+    public static String DATABASE_NAME = "Wordbooks.db";    // 로컬 db명
     public static int DATABASE_VERSION = 1;
 
 
@@ -52,21 +54,66 @@ public class WordbooksOpenHelper extends SQLiteOpenHelper {
 
     public static void setDatabase(Context context){
         File folder = new File(PACKAGE_DIR);
+        File outFile = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
 
         if(folder.exists()) {
         } else {
             folder.mkdirs();
         }
+
+        FileOutputStream fileOutputStream = null;
+        BufferedOutputStream bufferedOutputStream = null;
+
+        // ������ ��� ��쿡�� ��
+//        if(outfile.length() <= 0) {
+        AssetManager assetManager = context.getResources().getAssets();
+        try {
+            // ���� ����.
+            InputStream inStream = assetManager.open(DATABASE_NAME);
+            try {
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inStream);
+                outFile.createNewFile();
+                fileOutputStream = new FileOutputStream(outFile);
+                bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                int read = -1;
+                byte[] buffer = new byte[1024];
+                while( (read = bufferedInputStream.read(buffer,0, 1024)) != -1) {
+                    bufferedOutputStream.write(buffer, 0, read);
+                }
+
+                bufferedOutputStream.flush();
+                bufferedOutputStream.close();
+                fileOutputStream.close();
+                bufferedInputStream.close();
+                inStream.close();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        //}
+
+
+     /*   if(folder.exists()) {
+        } else {
+            folder.mkdirs();
+        }
         AssetManager assetManager = context.getResources().getAssets(); // context가 없으면 assets폴더를 찾지 못한다.
-        File outFile = new File(PACKAGE_DIR + "/" + DATABASE_NAME);
         InputStream inputStream = null;
         FileOutputStream fileOutputStream = null;
         long fileSize = 0;
-        try{
+
+*/
+
+      /*  try{
             inputStream = assetManager.open(DATABASE_NAME, AssetManager.ACCESS_BUFFER);
             fileSize = inputStream.available();
 
-            if(outFile.length() < 0){
+            if(outFile.length() <= 0){
                 byte[] tempData = new byte[(int) fileSize];
                 inputStream.read(tempData);
                 inputStream.close();
@@ -76,6 +123,6 @@ public class WordbooksOpenHelper extends SQLiteOpenHelper {
             }else { }
 
         } catch(IOException e){}
-          // 이곳에 public으로 쿼리 코드 생성?
+      */    // 이곳에 public으로 쿼리 코드 생성?
     }
 }
