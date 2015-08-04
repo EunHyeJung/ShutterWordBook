@@ -2,6 +2,8 @@ package org.androidtown.shutterwordbook.Activity;
 
 import java.util.Locale;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -23,7 +25,7 @@ import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.R;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener,  WordbookFragment.AccidentListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -173,46 +175,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
-
-/*
-    */
-/**
-     * A placeholder fragment containing a simple view.
-     *//*
-
-    public static class PlaceholderFragment extends Fragment {
-        */
-/**
-         * The fragment argument representing the section number for this
-         * fragment.
-         *//*
-
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        */
-/**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         *//*
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+    /* WordbookFragment와 통신 */
+    @Override
+    public void showWordbook(String wordbookName){
+        Intent intent = new Intent(this, ContentActivity.class);
+        intent.putExtra("wordbookName", wordbookName);
+        startActivity(intent);
     }
-*/
+
+
 
 }
