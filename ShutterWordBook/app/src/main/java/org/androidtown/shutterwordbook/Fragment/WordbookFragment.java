@@ -1,6 +1,7 @@
 package org.androidtown.shutterwordbook.Fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -10,11 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.androidtown.shutterwordbook.Helper.WordbooksOpenHelper;
 import org.androidtown.shutterwordbook.Activity.StartActivity;
+import org.androidtown.shutterwordbook.Activity.ContentActivity;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
 import org.androidtown.shutterwordbook.Helper.WordbooksOpenHelper;
@@ -56,6 +59,28 @@ public class WordbookFragment extends Fragment {
         if(isOpen){
             initList();
         }
+
+        //
+        listWordbook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                String wordbookName =  parent.getItemAtPosition(position).toString();
+                showWordbook(wordbookName);
+/*
+                toFind = parent.getItemAtPosition(position).toString();
+                textWord.setText(toFind);
+                search(toFind, false);
+*/
+
+            } catch (Exception e){
+                Log.d("WordbookFrag", "click error " + e.toString());
+            }
+        }
+    });
+
+
       return rootView;
     }
 //
@@ -78,12 +103,11 @@ public class WordbookFragment extends Fragment {
               String sql = "SELECT name  from Wordbooks";
              Cursor cursor = db.rawQuery(sql, null);
             //cursor.moveToFirst();
-            System.out.println("cursor Size "+cursor.getCount());
+
             while(cursor.moveToNext())
             {
                 String name = cursor.getString(0);
-                System.out.println("name : "+name);
-              wordbooks.add(name);
+                 wordbooks.add(name);
                 listCount++;
             }
             adapter =   new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, wordbooks);
@@ -96,6 +120,24 @@ public class WordbookFragment extends Fragment {
             System.out.println("에러 "+e.toString());
             Log.d("StartActivityyyy", "error in init : " + e.toString());
         }
+    }
+    /* End of InitList */
+
+    // 단어장 리스트 클릭시 해당 단어장을 보여주는 메소드
+    public void showWordbook(String wordbookName){
+/*        db = dbHelper.getReadableDatabase();
+        String sql = "SELECT name  from "+wordbookName;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext())
+        {
+            String name = cursor.getString(0);
+            wordbooks.add(name);
+
+        }*/
+        Intent in = new Intent(getActivity(), ContentActivity.class);
+        startActivity(in);
+
     }
 
 }
