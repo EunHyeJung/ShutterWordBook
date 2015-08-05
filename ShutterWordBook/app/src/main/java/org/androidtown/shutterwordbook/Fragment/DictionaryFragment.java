@@ -1,5 +1,7 @@
 package org.androidtown.shutterwordbook.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -61,6 +63,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     // 단어장에 단어 추가
     boolean isWordbook;
+    String word;
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -72,6 +75,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
 
         View rootView =  inflater.inflate(R.layout.fragment_dictionary, container, false);
+//
 
         // 레이아웃 연결
         buttonCamera = (Button) rootView.findViewById(R.id.button_camera);
@@ -123,9 +127,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         listWord.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                toFind = parent.getItemAtPosition(position).toString();
-                textWord.setText(toFind);
-
+              word  = parent.getItemAtPosition(position).toString();
+                   textWord.setText(word);
                 // PopupMenu 객체 생성
                 final PopupMenu popupMenu = new PopupMenu(getActivity(), view);  // Activity에서는 getContext()나 this, Fragment에서는 getActivity
                 // popupMenu에 들어갈 MenuItem 추가
@@ -137,11 +140,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     public boolean onMenuItemClick(MenuItem item) {
                         // TODO Auto-generated method stub
 
-                        if(item.getItemId() == R.id.addword){
-                            // 단어장에 추가 하고자 하는 단어와 뜻 찾음.
-                            search(toFind, false);
-                            showWordbookList(toFind, result);     // 기존에 존재하는 단어장 리스트 출력
-                        }
+                        // 단어장 리스트에서 단어 선택
+                         showWordbookList();
+
                         return false;
                     }
                     });
@@ -159,10 +160,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 fragementTransaction = getFragmentManager().beginTransaction();
                 search(toFind, true);
                 fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
-                System.out.println(result);
                 fragementTransaction.addToBackStack(null);
-
-                fragementTransaction.commit();
+                 fragementTransaction.commit();
 
             }
         });
@@ -172,24 +171,6 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
     /* End of onCreateView() */
-
-
-    /* 기존의 단어장 리스트 불러오기*/
-    public void showWordbookList(String word, String meaning){
-
-        // word : 추가할 단어 meaning : 추가할 단어의 뜻
-    }
-
-    /* 새로운 단어장 생성하기 */
-    public void createWordbook(){
-
-    }
-
-    /* 선택한 단어를 단어장에 추가하기*/
-    public void addWord(){
-
-    }
-
 
 
     /* Start of onClick */
@@ -289,6 +270,62 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         }
 
     }
+    /* End of InitList() */
+
+    /* 기존의 단어장 리스트 보여주기  */
+    public void showWordbookList(){
+
+        Bundle bundle = new Bundle();
+        bundle = getArguments();
+        bundle.getStringArrayList("wordbookList");
+        ArrayList wordbookList = new ArrayList<String >();
+        if(bundle != null) {
+            wordbookList = bundle.getStringArrayList("wordbookList");
+
+        } else{
+            System.out.println("왜이래");
+        }
+
+        final String[] items = (String[]) wordbookList.toArray(new String[wordbookList.size()]);
+
+        final String addWord = word;
+     
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        //제목 셋팅
+        alertDialogBuilder.setTitle("단어장 목록");
+        alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 프로그램을 종료한다
+                Toast.makeText(getActivity().getApplicationContext(), items[which]+"선택", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        // 다이얼로그 생성
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // 다이얼로그 보여주기
+        alertDialog.show();
+    }
+
+    /* End of showWordbookList() */
+
+
+
+
+
+    /* 새로운 단어장 생성하기 */
+    public void createWordbook(){
+
+    }
+
+    /* 선택한 단어를 단어장에 추가하기*/
+    public void addWord(){
+
+    }
+
+
 
     @Override
     public void onDestroy() {

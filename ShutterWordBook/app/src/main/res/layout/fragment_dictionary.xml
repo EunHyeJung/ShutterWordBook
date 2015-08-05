@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#333333"
    tools:context="org.androidtown.shutterwordbook.Fragment.DictionaryFragment"
-    android:id="@+id/frame_layout">
+    android:id="@+id/frame_layout_dicitonaray">
 
     <!-- TODO: Update blank fragment layout -->
 

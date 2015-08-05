@@ -1,5 +1,7 @@
 package org.androidtown.shutterwordbook.Activity;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Fragment.SettingFragment;
@@ -175,14 +178,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
-    /* WordbookFragment와 통신 */
+    /*     WordbookFragment와 통신
+    *      ContentActivity에 보고자 하는 단어장의 이름을 전달하여
+    *      ContentActivity에서 해당하는 단어장을 열어서 출력하도록 한다.
+    * */
     @Override
     public void showWordbook(String wordbookName){
         Intent intent = new Intent(this, ContentActivity.class);
         intent.putExtra("wordbookName", wordbookName);
         startActivity(intent);
     }
-
-
 
 }

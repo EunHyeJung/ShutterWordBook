@@ -1,4 +1,5 @@
 package org.androidtown.shutterwordbook.Fragment;
+import android.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 
 import android.app.Activity;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,12 +58,18 @@ public class WordbookFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_wordbook, container, false);
+
+
         listWordbooks = (ListView) rootView.findViewById(R.id.listView_wordbooks);
         wordbooks = new ArrayList<String >();
        boolean isOpen = openDatabase();
         if(isOpen){
             initList();
         }
+//
+
+        deliverWordbookList();
+        //
 
         //
         listWordbooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,6 +127,8 @@ public class WordbookFragment extends Fragment {
                 cursor.close();
             if(db != null)
                 db.close();
+
+
         } catch (Exception e) {
             System.out.println("에러 "+e.toString());
             Log.d("StartActivityyyy", "error in init : " + e.toString());
@@ -127,11 +137,29 @@ public class WordbookFragment extends Fragment {
     /* End of InitList */
 
 
+
+    /* DictionaryFragment로 단어장 리스트를 전달하는 메소드 */
+    public void deliverWordbookList()
+    {
+        Fragment dictionaryFragment = new DictionaryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("wordbookList", wordbooks);
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        dictionaryFragment.setArguments(bundle);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.frame_layout_dicitonaray, dictionaryFragment);
+        fragmentTransaction.commit();
+
+
+    }
+
+
     /* MainActivity와 통신하기 위한 interface
     *  MainActivity가 이 인터페이스를 구현해야만 한다. */
     public interface AccidentListener{
         void showWordbook(String wordbookName);
-    }
+   }
 
     @Override
     public void onAttach(Activity activity){
