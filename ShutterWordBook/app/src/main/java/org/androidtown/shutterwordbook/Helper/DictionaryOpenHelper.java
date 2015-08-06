@@ -100,4 +100,17 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
         //}
         return true;
     }
+
+    // 단어장에 단어 추가
+    public void  insertWord(String wordbookName, int book_id, int word_id){
+        SQLiteDatabase db = getWritableDatabase();
+         String query  = "insert into "+wordbookName+" values("+ book_id + ", " + word_id + ");";
+
+        try{
+                db.execSQL(query);
+
+        }catch(Exception ex){
+            Log.e("error", "Excpetion in insert SQL", ex);
+        }
+    }
 }

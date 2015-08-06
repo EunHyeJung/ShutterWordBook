@@ -16,20 +16,22 @@ import android.widget.ListView;
 
 import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
-import org.androidtown.shutterwordbook.Helper.WordbooksOpenHelper;
+
 import org.androidtown.shutterwordbook.R;
 
 import java.util.ArrayList;
 
 public class ContentActivity extends ActionBarActivity {
 
-    private ListView listWordbook;
+    private ListView listWord;
+    private ListView listMean;
     private ArrayAdapter<String> adapter;
-    private ArrayList content;
+    private ArrayList contentWord ;
+    private ArrayList contentMean;
 
     // DB 관련
-    private SQLiteDatabase wordbookDatabase;
-    WordbooksOpenHelper wordbookDbHelper;
+    private SQLiteDatabase dictionaryDatabase;
+    DictionaryOpenHelper dbHelper;
 
     private String name="null";
 
@@ -42,40 +44,41 @@ public class ContentActivity extends ActionBarActivity {
         Intent intent = getIntent();
          name = intent.getExtras().getString("wordbookName");
 
-        listWordbook = (ListView) findViewById(R.id.listView_wordbook);
-        content = new ArrayList<String >();
+        listWord = (ListView) findViewById(R.id.listView_word);
+        listMean = (ListView) findViewById(R.id.listView_mean);
+        contentWord = new ArrayList<String >();
+        contentMean = new ArrayList<String> ();
 
-
-        boolean isOpen = openWordbooksDatabase();
+        boolean isOpen = openDictionaryDatabase();
         if(isOpen){
            showContent();
         }
 
     }
 
-    /*  단어장 데이터베이스 열기 */
-    public boolean openWordbooksDatabase(){
-        System.out.println("opening database"+WordbooksOpenHelper.DATABASE_NAME);
-        wordbookDbHelper = new WordbooksOpenHelper(this);
+    /*  사전 데이터베이스 열기 */
+    public boolean openDictionaryDatabase(){
+        System.out.println("opening database");
+        dbHelper = new DictionaryOpenHelper(this);
          return true;
     }
 
     /* 단어장의 내용을 출력 */
     public void showContent(){
         try {
-            wordbookDatabase = wordbookDbHelper.getReadableDatabase();
-            String sql = "SELECT *  from "+name;
-            Cursor cursor =  wordbookDatabase.rawQuery(sql, null);
-            cursor.moveToFirst();
+            dictionaryDatabase = dbHelper.getReadableDatabase();
+            String sql = "SELECT  word_id from "+name;
+            Cursor cursor =  dictionaryDatabase.rawQuery(sql, null);
+          //  cursor.moveToFirst();
+
             while(cursor.moveToNext())
             {
-                int  wordId= cursor.getInt(1);
+                int  wordId= cursor.getInt(0);
                 search(wordId);
             }
             if(cursor != null)
                 cursor.close();
-            if( wordbookDatabase != null)
-                wordbookDatabase.close();
+
         } catch (Exception e) {
             System.out.println("wordbookDatabase 에러 "+e.toString());
             Log.d("StartActivityyyy", "error in init : " + e.toString());
@@ -85,13 +88,10 @@ public class ContentActivity extends ActionBarActivity {
     /* End of ShowContent */
 
     public void search(int wordId){
-        SQLiteDatabase dictionaryDatabase;
-        DictionaryOpenHelper dictionaryDbOpenHelper =  new DictionaryOpenHelper(this);
-        if(wordbookDbHelper != null)
-        {
-
+           System.out.println("search로 넘어오기는 ?");
             try {
-                dictionaryDatabase = dictionaryDbOpenHelper.getReadableDatabase();
+                dictionaryDatabase = dbHelper.getReadableDatabase();
+
                 Cursor cursor;
 
                 String sql = "SELECT * from Dictionary where _id like " +wordId;
@@ -99,15 +99,18 @@ public class ContentActivity extends ActionBarActivity {
                 cursor.moveToFirst();
                 String word = cursor.getString(1);
                 String mean = cursor.getString(2);
-                content.add(word);
-                adapter =   new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,content);
-                listWordbook.setAdapter(adapter);
+                contentWord.add(word);
+                contentMean.add(mean);
+                adapter =   new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,contentWord);
+                listWord.setAdapter(adapter);
+                adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contentMean);
+                listMean.setAdapter(adapter);
 
 
             } catch(Exception e){
                 System.out.println("DictionaryDatabase 에러 "+e.toString());
             }
-        }
+
 
 
     }

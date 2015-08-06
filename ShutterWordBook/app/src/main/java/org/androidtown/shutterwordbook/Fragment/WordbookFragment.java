@@ -17,19 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.androidtown.shutterwordbook.Activity.MainActivity;
-import org.androidtown.shutterwordbook.Helper.WordbooksOpenHelper;
-import org.androidtown.shutterwordbook.Activity.StartActivity;
-import org.androidtown.shutterwordbook.Activity.ContentActivity;
+
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
-import org.androidtown.shutterwordbook.Helper.WordbooksOpenHelper;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +32,7 @@ public class WordbookFragment extends Fragment {
     //
     //  DB 관련
     private SQLiteDatabase db;
-    WordbooksOpenHelper dbHelper;
+    DictionaryOpenHelper dbHelper;
 
     //
 
@@ -67,8 +59,6 @@ public class WordbookFragment extends Fragment {
             initList();
         }
 //
-
-        deliverWordbookList();
         //
 
         //
@@ -80,12 +70,6 @@ public class WordbookFragment extends Fragment {
                 String wordbookName =  parent.getItemAtPosition(position).toString();
 
                 mCallback.showWordbook(wordbookName);
-
-/*
-                toFind = parent.getItemAtPosition(position).toString();
-                textWord.setText(toFind);
-                search(toFind, false);
-*/
 
             } catch (Exception e){
                 Log.d("WordbookFrag", "click error " + e.toString());
@@ -102,8 +86,8 @@ public class WordbookFragment extends Fragment {
 
     /* 데이터베이스 열기 */
     public boolean openDatabase(){
-        System.out.println("opening database"+WordbooksOpenHelper.DATABASE_NAME);
-        dbHelper = new WordbooksOpenHelper(getActivity());
+        System.out.println("opening database");
+        dbHelper = new DictionaryOpenHelper(getActivity());
         //    db = dbHelper.getWritableDatabase();
         return true;
     }
@@ -112,8 +96,9 @@ public class WordbookFragment extends Fragment {
 
     private void initList(){
         try {
+            boolean is =openDatabase();
             db = dbHelper.getReadableDatabase();
-              String sql = "SELECT name  from Wordbooks";
+              String sql = "SELECT name from WordbookInfo";
              Cursor cursor = db.rawQuery(sql, null);
             while(cursor.moveToNext())
             {
@@ -138,21 +123,6 @@ public class WordbookFragment extends Fragment {
 
 
 
-    /* DictionaryFragment로 단어장 리스트를 전달하는 메소드 */
-    public void deliverWordbookList()
-    {
-        Fragment dictionaryFragment = new DictionaryFragment();
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("wordbookList", wordbooks);
-
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        dictionaryFragment.setArguments(bundle);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.replace(R.id.frame_layout_dicitonaray, dictionaryFragment);
-        fragmentTransaction.commit();
-
-
-    }
 
 
     /* MainActivity와 통신하기 위한 interface

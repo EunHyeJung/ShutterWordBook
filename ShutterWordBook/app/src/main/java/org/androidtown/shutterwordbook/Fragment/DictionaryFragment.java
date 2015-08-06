@@ -1,6 +1,7 @@
 package org.androidtown.shutterwordbook.Fragment;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -49,6 +50,7 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     // DB관련
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper;
+
 
     // 발음
     TextToSpeech tts;
@@ -127,7 +129,9 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         listWord.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-              word  = parent.getItemAtPosition(position).toString();
+                  word  = parent.getItemAtPosition(position).toString();
+                   final  int wordId =(int) id+1;
+
                    textWord.setText(word);
                 // PopupMenu 객체 생성
                 final PopupMenu popupMenu = new PopupMenu(getActivity(), view);  // Activity에서는 getContext()나 this, Fragment에서는 getActivity
@@ -140,8 +144,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                     public boolean onMenuItemClick(MenuItem item) {
                         // TODO Auto-generated method stub
 
-                        // 단어장 리스트에서 단어 선택
-                         showWordbookList();
+                        // 단어장 리스트에서 단어장 선택
+                         showWordbookList(wordId);
 
                         return false;
                     }
@@ -273,23 +277,25 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     /* End of InitList() */
 
     /* 기존의 단어장 리스트 보여주기  */
-    public void showWordbookList(){
+    public void showWordbookList(int wordId){
 
-        Bundle bundle = new Bundle();
-        bundle = getArguments();
-        bundle.getStringArrayList("wordbookList");
+        db = mHelper.getReadableDatabase();
+        String sql = "SELECT name from WordbookInfo";
+        Cursor cursor = db.rawQuery(sql, null);
+
         ArrayList wordbookList = new ArrayList<String >();
-        if(bundle != null) {
-            wordbookList = bundle.getStringArrayList("wordbookList");
 
-        } else{
-            System.out.println("왜이래");
+        while(cursor.moveToNext())
+        {
+            String name = cursor.getString(0);
+            wordbookList.add(name);
+
         }
 
         final String[] items = (String[]) wordbookList.toArray(new String[wordbookList.size()]);
 
-        final String addWord = word;
-     
+        final int word_id=wordId;
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
         //제목 셋팅
@@ -297,8 +303,11 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
         alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // 프로그램을 종료한다
-                Toast.makeText(getActivity().getApplicationContext(), items[which]+"선택", Toast.LENGTH_LONG).show();
+                // 현재 선택한 단어장에 단어추가
+                String wordbookName =  items[which];
+                int book_id = which+1;
+               mHelper.insertWord(wordbookName, book_id, word_id);
+                //Toast.makeText(getActivity().getApplicationContext(), items[which]+"선택", Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });
@@ -320,12 +329,30 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     }
 
-    /* 선택한 단어를 단어장에 추가하기*/
-    public void addWord(){
+/*
+    */
+/* 선택한 단어를 단어장에 추가하기*//*
+
+    public void addWord(int book_id, int word_id){
+
+        boolean isOpen = openDatabase();
+        db = mHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //데이터 삽입은 put 이용
+        values.put("book_id", book_id);
+        values.put("word_id", word_id);
+
+        Toast.makeText(getActivity().getApplicationContext(), "단어 추가 완료 ", Toast.LENGTH_LONG).show();
 
     }
+*/
 
-
+    /* 단어장 데이터베이스 열기 */
+    public boolean openDatabase(){
+      //  System.out.println("opening database"+ WordbooksOpenHelper.DATABASE_NAME);
+        mHelper= new DictionaryOpenHelper(getActivity());
+        return true;
+    }
 
     @Override
     public void onDestroy() {
