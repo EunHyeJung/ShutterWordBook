@@ -1,8 +1,5 @@
 package org.androidtown.shutterwordbook.Activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,10 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
+
+import org.androidtown.shutterwordbook.Class.DataAdapter;
+import org.androidtown.shutterwordbook.Class.ListViewItem;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 
 import org.androidtown.shutterwordbook.R;
@@ -22,18 +20,20 @@ import org.androidtown.shutterwordbook.R;
 import java.util.ArrayList;
 
 public class ContentActivity extends ActionBarActivity {
+    //
+    private ListView listViewContent;
+    private ArrayList<ListViewItem> data;
 
-    private ListView listWord;
-    private ListView listMean;
-    private ArrayAdapter<String> adapter;
-    private ArrayList contentWord ;
-    private ArrayList contentMean;
+    // 데이터를 연결할 Adapter
+    DataAdapter dataAdapter;
+
+    //
 
     // DB 관련
     private SQLiteDatabase dictionaryDatabase;
     DictionaryOpenHelper dbHelper;
 
-    private String name="null";
+    private String name = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,53 +42,55 @@ public class ContentActivity extends ActionBarActivity {
 
         // 보여주고자 하는 단어장 이름을 받아옴
         Intent intent = getIntent();
-         name = intent.getExtras().getString("wordbookName");
+        name = intent.getExtras().getString("wordbookName");
 
-        listWord = (ListView) findViewById(R.id.listView_word);
-        listMean = (ListView) findViewById(R.id.listView_mean);
-        contentWord = new ArrayList<String >();
-        contentMean = new ArrayList<String> ();
+      listViewContent = (ListView) findViewById(R.id.listView_content);
+        dataAdapter = new DataAdapter(this, data);
+        listViewContent.setAdapter(dataAdapter);
 
         boolean isOpen = openDictionaryDatabase();
-        if(isOpen){
-           showContent();
+        if (isOpen) {
+            showContent();
         }
 
     }
+    /* End of onCreateVeiw() */
+
 
     /*  사전 데이터베이스 열기 */
-    public boolean openDictionaryDatabase(){
+    public boolean openDictionaryDatabase() {
         System.out.println("opening database");
         dbHelper = new DictionaryOpenHelper(this);
-         return true;
+        return true;
     }
 
     /* 단어장의 내용을 출력 */
-    public void showContent(){
+    public void showContent() {
         try {
             dictionaryDatabase = dbHelper.getReadableDatabase();
-            String sql = "SELECT  word_id from "+name;
-            Cursor cursor =  dictionaryDatabase.rawQuery(sql, null);
-          //  cursor.moveToFirst();
+            String sql = "SELECT  word_id from " + name;
+            Cursor cursor = dictionaryDatabase.rawQuery(sql, null);
+            //  cursor.moveToFirst();
 
-            while(cursor.moveToNext())
-            {
-                int  wordId= cursor.getInt(0);
+            while (cursor.moveToNext()) {
+                int wordId = cursor.getInt(0);
                 search(wordId);
             }
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
 
         } catch (Exception e) {
-            System.out.println("wordbookDatabase 에러 "+e.toString());
-            Log.d("StartActivityyyy", "error in init : " + e.toString());
+            Log.d("ContentActivity", "error in showContent() : " + e.toString());
         }
 
     }
     /* End of ShowContent */
 
+
+
+
+    //
     public void search(int wordId){
-           System.out.println("search로 넘어오기는 ?");
             try {
                 dictionaryDatabase = dbHelper.getReadableDatabase();
 
@@ -99,13 +101,12 @@ public class ContentActivity extends ActionBarActivity {
                 cursor.moveToFirst();
                 String word = cursor.getString(1);
                 String mean = cursor.getString(2);
-                contentWord.add(word);
-                contentMean.add(mean);
-                adapter =   new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,contentWord);
-                listWord.setAdapter(adapter);
-                adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contentMean);
-                listMean.setAdapter(adapter);
 
+                // DataAdapter를 통해서 Arraylist에 자료 저장
+                // 하나의 String 값을 저장하던 것을 ListViewClass의 객체를 저장하던 것으로 변경
+                // ListViewClass 객체는 생성자에 리스트 표시
+
+                dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
 
             } catch(Exception e){
                 System.out.println("DictionaryDatabase 에러 "+e.toString());

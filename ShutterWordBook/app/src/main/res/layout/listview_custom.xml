@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="WORD"
+        android:id="@+id/textView_word2"
+        android:textSize="15dp"
+        android:paddingLeft="5dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="MEAN"
+        android:id="@+id/textView_mean2"
+        android:textSize="12dp"
+        android:paddingLeft="5dp"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
