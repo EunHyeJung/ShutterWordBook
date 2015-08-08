@@ -2,6 +2,7 @@ package org.androidtown.shutterwordbook.Fragment;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import org.androidtown.shutterwordbook.Activity.MainActivity;
 import org.androidtown.shutterwordbook.Activity.StartActivity;
+import org.androidtown.shutterwordbook.Class.AddWordbookDialog;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
 
@@ -64,8 +66,10 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     FragmentTransaction fragementTransaction;
 
     // 단어장에 단어 추가
-    boolean isWordbook;
+
     String word;
+
+    int wordbookId=0;       //  단어장 ID
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -167,6 +171,17 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                 fragementTransaction.addToBackStack(null);
                  fragementTransaction.commit();
 
+            }
+        });
+
+        textMean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragementTransaction = getFragmentManager().beginTransaction();
+                search(toFind, true);
+                fragementTransaction.replace(R.id.first_page, new WordmeanFragment(toFind, result));
+                fragementTransaction.addToBackStack(null);
+                fragementTransaction.commit();
             }
         });
 
@@ -278,6 +293,21 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
     /* 기존의 단어장 리스트 보여주기  */
     public void showWordbookList(int wordId){
+        final int tempWordId = wordId;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Layout 리소스를 로드할 수 있는 객체 ( dialog_newwordbook.xml 읽어들이기 )
+        LayoutInflater inflater = getLayoutInflater(getArguments());
+
+        // res/layout/dialog_wordbook.xml 파일 로드, 추가 버튼 눌러지면 이 객체에 접근해서
+        // 포함된 EditText 객체를 취득
+        final View addWordbookVIew = inflater.inflate(R.layout.dialog_wordbooklist, null);
+        // Dialog에 Message 대신, XML 레이아웃을 포함
+        builder.setView(addWordbookVIew);
+        Button buttonAdd = (Button) addWordbookVIew.findViewById(R.id.button_addWordbook);
+
+        ArrayAdapter<String> adapter;
+        ListView listWordbook=(ListView) addWordbookVIew.findViewById(R.id.listView_wordbooks);;  // 단어리스트
 
         db = mHelper.getReadableDatabase();
         String sql = "SELECT name from WordbookInfo";
@@ -292,60 +322,51 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
 
         }
 
-        final String[] items = (String[]) wordbookList.toArray(new String[wordbookList.size()]);
+        adapter =   new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.list_textview, wordbookList);
+        listWordbook.setAdapter(adapter);
 
-        final int word_id=wordId;
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
-        //제목 셋팅
-        alertDialogBuilder.setTitle("단어장 목록");
-        alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+        // 단어장 추가
+        buttonAdd.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 현재 선택한 단어장에 단어추가
-                String wordbookName =  items[which];
-                int book_id = which+1;
-               mHelper.insertWord(wordbookName, book_id, word_id);
-                //Toast.makeText(getActivity().getApplicationContext(), items[which]+"선택", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
+            public void onClick(View v) {
+                createWordbook();
             }
         });
 
-        // 다이얼로그 생성
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        // 다이얼로그 보여주기
-        alertDialog.show();
+        // listWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listWordbook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String wordbookName = parent.getItemAtPosition(position).toString();
+                    int bookId = (int) id + 1;
+                    mHelper.insertWord(wordbookName, bookId, tempWordId);
+                }
+            });
+
+        builder.create();
+        builder.show();
+
+
     }
 
     /* End of showWordbookList() */
 
 
 
-
-
-    /* 새로운 단어장 생성하기 */
+    /* 새로운 단어장 생성하기
+    *  단어장 생성 다이얼로그를 표시한다.
+    * */
     public void createWordbook(){
 
-    }
+        AddWordbookDialog dialog = new AddWordbookDialog(getActivity());
+        dialog.show();
 
-/*
-    */
-/* 선택한 단어를 단어장에 추가하기*//*
-
-    public void addWord(int book_id, int word_id){
-
-        boolean isOpen = openDatabase();
-        db = mHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //데이터 삽입은 put 이용
-        values.put("book_id", book_id);
-        values.put("word_id", word_id);
-
-        Toast.makeText(getActivity().getApplicationContext(), "단어 추가 완료 ", Toast.LENGTH_LONG).show();
 
     }
-*/
+
+
 
     /* 단어장 데이터베이스 열기 */
     public boolean openDatabase(){

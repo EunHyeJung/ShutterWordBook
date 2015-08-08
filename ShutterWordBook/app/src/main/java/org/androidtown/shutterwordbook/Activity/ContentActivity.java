@@ -44,7 +44,9 @@ public class ContentActivity extends ActionBarActivity {
         Intent intent = getIntent();
         name = intent.getExtras().getString("wordbookName");
 
-      listViewContent = (ListView) findViewById(R.id.listView_content);
+
+        data = new ArrayList<ListViewItem>();
+        listViewContent = (ListView) findViewById(R.id.listView_content);
         dataAdapter = new DataAdapter(this, data);
         listViewContent.setAdapter(dataAdapter);
 
@@ -80,7 +82,7 @@ public class ContentActivity extends ActionBarActivity {
                 cursor.close();
 
         } catch (Exception e) {
-            Log.d("ContentActivity", "error in showContent() : " + e.toString());
+            Log.d("contentAcvtivity", "error in init : " + e.toString());
         }
 
     }
@@ -139,4 +141,8 @@ public class ContentActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }

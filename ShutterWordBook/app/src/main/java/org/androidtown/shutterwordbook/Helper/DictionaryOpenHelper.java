@@ -101,6 +101,64 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    // 새로운 단어장 생성
+    public void createWordbookTable(String tableName){
+
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "CREATE TABLE `"+tableName+"` (\n" +
+                "\t`book_id`\tINTEGER,\n" +
+                "\t`word_id`\tINTEGER,\n" +
+                "\tPRIMARY KEY(book_id,word_id),\n" +
+                "\tFOREIGN KEY(`book_id`) REFERENCES WordbookInfo ( _id ),\n" +
+                "\tFOREIGN KEY(`word_id`) REFERENCES Dictionary ( _id )\n" +
+                "); ";
+        try{
+            db.execSQL(query);
+
+        }catch(Exception ex){
+            System.out.println("뭐가 문제 ? : "+ex);
+            Log.e("error", "Excpetion in insert SQL", ex);
+        }
+
+    }
+
+
+    public void insertWordbookInfo(int bookId, String name){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "INSERT INTO `WordbookInfo`(`_id`,`name`) VALUES ("+bookId+",'"+name+"');";
+        try{
+            db.execSQL(query);
+        }catch(Exception ex){
+            System.out.println("insert Word book Info 에서는 뭐가 문제 ? : "+ex);
+            Log.e("error", "Excpetion in insertWordbookInfo SQL", ex);
+        }
+    }
+
+    // 단어장 삭제, WordbookInfo에서 정보삭제 + 단어장 테이블 삭제
+    public void deleteWordbook(String name){
+        SQLiteDatabase db = getWritableDatabase();
+
+        // WordbookInfo에서 해당 테이블 삭제
+        String query = "DELETE FROM `WordbookInfo` WHERE `name`='"+name+"';";
+        try{
+            db.execSQL(query);
+        }catch(Exception ex){
+            System.out.println("delete Word book Info 에서는 뭐가 문제 ? : "+ex);
+            Log.e("error", "Excpetion in DeleteWordbookInfo SQL", ex);
+        }
+
+        // 해당 단어장 테이블 삭제
+        query = "DROP TABLE `"+name+"`;";
+        try{
+            db.execSQL(query);
+        }catch(Exception ex){
+            System.out.println("drop Table 에서는 뭐가 문제 ? : "+ex);
+            Log.e("error", "Excpetion in Drop wordbook table  SQL", ex);
+        }
+
+    }
+
+
     // 단어장에 단어 추가
     public void  insertWord(String wordbookName, int book_id, int word_id){
         SQLiteDatabase db = getWritableDatabase();
@@ -113,4 +171,6 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
             Log.e("error", "Excpetion in insert SQL", ex);
         }
     }
+
+
 }
