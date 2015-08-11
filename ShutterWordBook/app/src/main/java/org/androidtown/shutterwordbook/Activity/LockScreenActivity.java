@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,8 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         final int ids[];
         final String names[];
         int index = 0;
+
+//        ListView listView = (ListView) findViewById(android.R.layout.simple_list_item_multiple_choice);
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(LockScreenActivity.this, android.R.layout.select_dialog_multichoice);
 
