@@ -50,8 +50,8 @@ public class WordbookFragment extends Fragment  {
     //
     private Button buttonAddWordbook;
     private Button buttonDeleteWordbook;
-    //
-
+    //Fragment와 통신하는 부분
+    AccidentListener mCallback;
     //
 
     /* Start of onCreate View*/
@@ -91,7 +91,7 @@ public class WordbookFragment extends Fragment  {
             try {
                 String wordbookName =  parent.getItemAtPosition(position).toString();
                 System.out.println(wordbookName);
-
+                mCallback.showWordbook(wordbookName);
             } catch (Exception e){
                 Log.d("WordbookFrag", "click error " + e.toString());
             }
@@ -140,6 +140,7 @@ public class WordbookFragment extends Fragment  {
             db = dbHelper.getReadableDatabase();
               String sql = "SELECT name from WordbookInfo";
              Cursor cursor = db.rawQuery(sql, null);
+            adapterWordbook.clear();
             while(cursor.moveToNext())
             {
                 String name = cursor.getString(0);
@@ -176,6 +177,19 @@ public class WordbookFragment extends Fragment  {
         // 여기서 리스트 갱신
     }
 
+    public interface AccidentListener {
+        void showWordbook(String wordbookName);
+    }
+    @Override
+       public void onAttach(Activity activity){
 
-
+              super.onAttach(activity);
+               // Activity(MainActivity)가 onSelectedListener를 구현했는지 확인
+                       try{
+                     mCallback = (AccidentListener) activity;
+                           } catch(ClassCastException e){
+                           System.out.println("에러 ? : "+e.toString());
+                       Log.d("GUN", activity.toString() + "must implement AccidentListner");
+                   }
+    }
 }

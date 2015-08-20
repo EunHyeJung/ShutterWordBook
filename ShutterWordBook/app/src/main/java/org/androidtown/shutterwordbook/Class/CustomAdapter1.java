@@ -27,7 +27,7 @@ public class CustomAdapter1 extends ArrayAdapter<WordbookListView> {
     // 레이아웃 XML을 읽어들이기 위한 객체
     public LayoutInflater mInflater;
 
-    CheckBox checkBoxWordbookName;
+    public CheckBox checkBoxWordbookName;
 
     public CustomAdapter1(Context context, ArrayList<WordbookListView> object) {
 
