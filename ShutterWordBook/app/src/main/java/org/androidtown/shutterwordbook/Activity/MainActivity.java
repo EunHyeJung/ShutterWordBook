@@ -2,10 +2,14 @@ package org.androidtown.shutterwordbook.Activity;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -20,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Fragment.SettingFragment;
@@ -28,7 +33,7 @@ import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.R;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener,  WordbookFragment.AccidentListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,6 +49,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    private Map<Integer, String> mFragmentTags;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+
+
+                Fragment fragment = ((SectionsPagerAdapter )mViewPager.getAdapter()).getFragment(position);
+                 if(position == 1 && fragment != null){
+                    fragment.onResume();
+
+                 }
+
             }
         });
 
@@ -113,6 +129,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
+
     }
 
     @Override
@@ -127,10 +144,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+
+            mFragmentManager = fm;
+            mFragmentTags = new HashMap<Integer, String>();
         }
 
         @Override
@@ -147,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     currentFragment = new DictionaryFragment();
                     break;
                 case 1:
-                    currentFragment = new WordbookFragment();
+                        currentFragment = new WordbookFragment();
                     break;
                 case 2:
                     currentFragment = new SettingFragment();
@@ -155,14 +176,43 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             }
 
             return currentFragment;
-
       }
+
 
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
         }
+
+
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position){
+            Object obj = super.instantiateItem(container, position);
+
+                // fragment tag를 여기 기록
+                Fragment f = (Fragment) obj;
+                String tag = f.getTag();
+                mFragmentTags.put(position, tag);
+
+
+
+            return obj;
+        }
+
+
+
+        public Fragment getFragment(int position){
+            String tag = mFragmentTags.get(position);
+
+            if(tag == null)
+                return null;
+            return mFragmentManager.findFragmentByTag(tag);
+        }
+
+
+
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -178,15 +228,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
-    /*     WordbookFragment와 통신
+/*    *//*     WordbookFragment와 통신
     *      ContentActivity에 보고자 하는 단어장의 이름을 전달하여
     *      ContentActivity에서 해당하는 단어장을 열어서 출력하도록 한다.
-    * */
+    * *//*
     @Override
     public void showWordbook(String wordbookName){
         Intent intent = new Intent(this, ContentActivity.class);
         intent.putExtra("wordbookName", wordbookName);
         startActivity(intent);
-    }
+    }*/
 
 }

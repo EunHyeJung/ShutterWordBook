@@ -25,6 +25,7 @@
             >
 
             <Button
+                android:id = "@+id/button_addWordbook"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
                 android:text="+ 단어장 추가"
@@ -35,6 +36,7 @@
 
 
             <Button
+                android:id="@+id/button_deleteWordbook"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
                 android:text="- 단어장 삭제"
@@ -51,8 +53,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/listView_wordbooks"
             android:layout_gravity="center_horizontal"
-
             android:background="#FFFFFF"
+            android:choiceMode="singleChoice"
             />
     </LinearLayout>
 

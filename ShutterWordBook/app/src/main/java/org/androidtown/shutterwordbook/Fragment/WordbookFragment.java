@@ -15,9 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 
+import org.androidtown.shutterwordbook.Class.AddWordbookDialog;
+import org.androidtown.shutterwordbook.Class.CustomAdapter1;
+import org.androidtown.shutterwordbook.Class.ListViewItem;
+import org.androidtown.shutterwordbook.Class.WordbookListDialog;
+import org.androidtown.shutterwordbook.Class.WordbookListView;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
 
@@ -26,7 +32,9 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WordbookFragment extends Fragment {
+
+
+public class WordbookFragment extends Fragment  {
 
 
     //
@@ -35,13 +43,15 @@ public class WordbookFragment extends Fragment {
     DictionaryOpenHelper dbHelper;
 
     //
-
     private ListView listWordbooks;  // 단어장 리스트
-    private ArrayAdapter<String> adapter;
-    private ArrayList wordbooks;
+    private CustomAdapter1 adapterWordbook;
+    private ArrayList<WordbookListView> arrayListWordbook;
 //
-    // Fragment와 통신하는 부분
-        AccidentListener mCallback;
+    //
+    private Button buttonAddWordbook;
+    private Button buttonDeleteWordbook;
+    //
+
     //
 
     /* Start of onCreate View*/
@@ -51,9 +61,21 @@ public class WordbookFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_wordbook, container, false);
 
+/*
+
+        listViewContent = (ListView) findViewById(R.id.listView_content);
+        data = new ArrayList<ListViewItem>();
+        dataAdapter = new DataAdapter(this, data);
+        listViewContent.setAdapter(dataAdapter);
+*/
 
         listWordbooks = (ListView) rootView.findViewById(R.id.listView_wordbooks);
-        wordbooks = new ArrayList<String >();
+        arrayListWordbook = new ArrayList<WordbookListView>();
+        adapterWordbook = new CustomAdapter1(getActivity(), arrayListWordbook);
+        listWordbooks.setAdapter(adapterWordbook);
+
+        buttonAddWordbook = (Button) rootView.findViewById(R.id.button_addWordbook);
+        buttonDeleteWordbook = (Button) rootView.findViewById(R.id.button_deleteWordbook);
        boolean isOpen = openDatabase();
         if(isOpen){
             initList();
@@ -61,15 +83,14 @@ public class WordbookFragment extends Fragment {
 //
         //
 
-        //
+        // 단어장 내용 보여줌
         listWordbooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             try {
                 String wordbookName =  parent.getItemAtPosition(position).toString();
-
-                mCallback.showWordbook(wordbookName);
+                System.out.println(wordbookName);
 
             } catch (Exception e){
                 Log.d("WordbookFrag", "click error " + e.toString());
@@ -77,10 +98,30 @@ public class WordbookFragment extends Fragment {
         }
     });
 
+       // 단어장 추가 버튼 클릭
+       buttonAddWordbook.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               int temp  = 0;
+               AddWordbookDialog addWordbookDialog = new AddWordbookDialog(getActivity(), temp);
+               addWordbookDialog.show();
+
+           }
+       });
+        // 단어장 삭제 버튼 클릭
+        buttonDeleteWordbook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    adapterWordbook.deleteMode();
+            }
+        });
+
+
 
       return rootView;
     }
 /*  End of onCreateView()*/
+
 
 
 
@@ -96,18 +137,17 @@ public class WordbookFragment extends Fragment {
 
     private void initList(){
         try {
-            boolean is =openDatabase();
             db = dbHelper.getReadableDatabase();
               String sql = "SELECT name from WordbookInfo";
              Cursor cursor = db.rawQuery(sql, null);
             while(cursor.moveToNext())
             {
                 String name = cursor.getString(0);
-                 wordbooks.add(name);
+                adapterWordbook.add(new WordbookListView(getActivity().getApplicationContext(), name, false));
 
             }
-            adapter =   new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, wordbooks);
-            listWordbooks.setAdapter(adapter);
+
+
             if(cursor != null)
                 cursor.close();
             if(db != null)
@@ -125,22 +165,17 @@ public class WordbookFragment extends Fragment {
 
 
 
-    /* MainActivity와 통신하기 위한 interface
-    *  MainActivity가 이 인터페이스를 구현해야만 한다. */
-    public interface AccidentListener{
-        void showWordbook(String wordbookName);
-   }
+
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        // Activity(MainActivity)가 onSelectedListener를 구현했는지 확인
-        try{
-            mCallback = (AccidentListener) activity;
-        } catch(ClassCastException e){
-            System.out.println("에러 ? : "+e.toString());
-            Log.d("GUN", activity.toString() + "must implement AccidentListner");
-        }
+    public void onResume(){
+        super.onResume();
+
+        initList();
+
+        // 여기서 리스트 갱신
     }
+
+
 
 }

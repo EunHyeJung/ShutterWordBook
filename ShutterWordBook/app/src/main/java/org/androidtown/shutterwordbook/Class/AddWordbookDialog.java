@@ -11,8 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
+import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
+
+import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 
 /**
  * Created by ehye on 2015-08-08.
@@ -22,10 +26,15 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper = new DictionaryOpenHelper(getContext());
 
-    Button buttonAdd;
+    int wordId;
 
-    public AddWordbookDialog(Context context){
+    Button buttonAdd;
+    public  String name;
+
+    public AddWordbookDialog(Context context, int wordId){
         super(context);
+
+        this.wordId = wordId;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_wordbook);
@@ -39,7 +48,7 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
 
     public void onClick(View view){
         EditText editTextName = (EditText) findViewById(R.id.editText_name);
-        String name = editTextName.getText().toString();        // 추가할 영어 단어장 이름
+         name = editTextName.getText().toString();        // 추가할 영어 단어장 이름
 
 
          db = mHelper.getReadableDatabase();
@@ -54,11 +63,22 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
 
         Toast.makeText(this.getContext(), name+"추가 완료", Toast.LENGTH_LONG).show();
 
-        //Toast.makeText(, name + " 추가 완료", Toast.LENGTH_SHORT).show();
 
-        if(view == buttonAdd){
+
+        if(view == buttonAdd ){
+
+            if(wordId != 0) {
+                //단어장 추가가 이루어지면 다시 단어장 리스트를 보여주는 다이얼로그 호출
+                WordbookListDialog wordbookListDialog = new WordbookListDialog(getContext(), wordId);
+                wordbookListDialog.show();
                 dismiss();
+            }
+            else {
+                dismiss();
+            }
         }
+
+
     }
 
     @Override
