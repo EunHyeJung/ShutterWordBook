@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.androidtown.shutterwordbook.Activity.MainActivity;
 import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
@@ -29,7 +33,10 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
     int wordId;
 
     Button buttonAdd;
-    public  String name;
+    public  String name=null;
+
+    private OnDismissListener onDismissListener = null;
+
 
     public AddWordbookDialog(Context context, int wordId){
         super(context);
@@ -41,6 +48,7 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
 
         buttonAdd = (Button) findViewById(R.id.button_add);
         buttonAdd.setOnClickListener(this);
+
     }
 
 
@@ -74,6 +82,9 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
                 dismiss();
             }
             else {
+                if(onDismissListener != null){
+                    onDismissListener.onDismiss(AddWordbookDialog.this);
+                }
                 dismiss();
             }
         }
@@ -81,8 +92,14 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
 
     }
 
+
+    public String getNewWordbookName(){
+        return name;
+    }
+
     @Override
     public void onClick(DialogInterface dialog, int which) {
 
     }
+
 }
