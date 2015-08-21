@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
@@ -27,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.androidtown.shutterwordbook.Class.AddWordbookDialog;
 import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Fragment.SettingFragment;
 
@@ -35,7 +33,7 @@ import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.R;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, WordbookFragment.AccidentListener , DialogInterface.OnDismissListener  {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, WordbookFragment.AccidentListener  {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -50,12 +48,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    public ViewPager mViewPager;
+    ViewPager mViewPager;
 
     private Map<Integer, String> mFragmentTags;
     private FragmentManager mFragmentManager;
-
-    String  newWordbookName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +82,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 Fragment fragment = ((SectionsPagerAdapter )mViewPager.getAdapter()).getFragment(position);
                  if(position == 1 && fragment != null){
                     fragment.onResume();
-              }
+
+                 }
 
             }
         });
@@ -143,16 +140,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-
-    // 다이얼로그가 dismiss 될때 호출됨.
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        Fragment fragment = ((SectionsPagerAdapter )mViewPager.getAdapter()).getFragment(1);
-        if(fragment != null){
-            fragment.onResume();
-        }
-    }
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -203,10 +190,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public Object instantiateItem(ViewGroup container, int position){
             Object obj = super.instantiateItem(container, position);
+
                 // fragment tag를 여기 기록
                 Fragment f = (Fragment) obj;
                 String tag = f.getTag();
                 mFragmentTags.put(position, tag);
+
+
+
             return obj;
         }
 
@@ -249,6 +240,5 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         intent.putExtra("wordbookName", wordbookName);
         startActivity(intent);
     }
-
 
 }
