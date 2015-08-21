@@ -1,5 +1,7 @@
 package org.androidtown.shutterwordbook.Fragment;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 
 import android.app.Activity;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
  */
 
 
-public class WordbookFragment extends Fragment  {
+public class WordbookFragment extends Fragment {
 
 
     //
@@ -54,6 +56,8 @@ public class WordbookFragment extends Fragment  {
     AccidentListener mCallback;
     //
 
+    String newWordbookName=null;
+    //
     /* Start of onCreate View*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,9 +109,10 @@ public class WordbookFragment extends Fragment  {
                int temp  = 0;
                AddWordbookDialog addWordbookDialog = new AddWordbookDialog(getActivity(), temp);
                addWordbookDialog.show();
-
+               addWordbookDialog.setOnDismissListener((DialogInterface.OnDismissListener) getActivity());
            }
        });
+
         // 단어장 삭제 버튼 클릭
         buttonDeleteWordbook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +126,6 @@ public class WordbookFragment extends Fragment  {
       return rootView;
     }
 /*  End of onCreateView()*/
-
 
 
 
@@ -172,13 +176,16 @@ public class WordbookFragment extends Fragment  {
     public void onResume(){
         super.onResume();
 
+        // 리스트 갱신
         initList();
 
-        // 여기서 리스트 갱신
+
     }
+
 
     public interface AccidentListener {
         void showWordbook(String wordbookName);
+
     }
     @Override
        public void onAttach(Activity activity){
