@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/abc_search_url_text_normal"
+    android:background="@color/color_lightblue"
+    android:padding="10dp"
     android:orientation="vertical">
 
 
@@ -18,35 +19,102 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/color_deepblue"
+            android:textColor="@color/color_white"
             android:text="단어장 선택" />
 
+        <!-- 단어장 이름 -->
         <TextView
             android:id="@+id/textView_lock_wordbook_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:gravity="center"
-            android:text="단어장이름"
+            android:text="단어장을 선택해주세요"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_lock_wordmean"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:background="@color/abc_search_url_text_normal"
         android:gravity="center"
-        android:text="단어의미"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:id="@+id/textView_lock_word"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/color_white"
+            android:text=""
+            android:id="@+id/button_lock_show" />
+
+        <!-- 단어 의미 -->
+        <TextView
+            android:id="@+id/textView_lock_wordmean"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="◀"
+            android:background="@color/color_white"
+            android:id="@+id/button_lock_previous" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="0 / 0"
+            android:id="@+id/textView_lock_index"
+            android:layout_margin="10dp"
+            android:gravity="center" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:text="▶"
+            android:id="@+id/button_lock_next" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/button_lock_ok"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="0dp"
+        android:background="@color/color_deepblue"
         android:layout_gravity="center|bottom"
         android:layout_weight="1"
-        android:text="OK" />
+        android:textColor="@color/color_white"
+        android:text="닫기" />
 
 </LinearLayout>

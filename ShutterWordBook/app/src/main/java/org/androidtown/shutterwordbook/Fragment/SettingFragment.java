@@ -9,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import org.androidtown.shutterwordbook.Activity.LockScreenActivity;
 import org.androidtown.shutterwordbook.Helper.ScreenService;
 import org.androidtown.shutterwordbook.R;
 
@@ -77,7 +79,6 @@ public class SettingFragment extends Fragment {
 
             }
         });
-
         return rootView;
     }
 }
