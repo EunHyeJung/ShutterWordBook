@@ -21,5 +21,7 @@
     <string name="text_db_ready">데이터베이스가 생성되었습니다</string>
     <string name="text_tts_error">발음기능을 사용할 수 없습니다</string>
     <string name="title_activity_content">ContentActivity</string>
+    <string name="title_activity_delete_wordbook">DeleteWordbookActivity</string>
+    <string name="title_activity_delete_word">DeleteWord</string>
 
 </resources>

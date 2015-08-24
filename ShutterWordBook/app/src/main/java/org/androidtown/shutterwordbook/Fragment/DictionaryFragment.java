@@ -1,9 +1,5 @@
 package org.androidtown.shutterwordbook.Fragment;
 
-import android.app.AlertDialog;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -35,10 +31,8 @@ import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
-import org.androidtown.shutterwordbook.Activity.MainActivity;
 import org.androidtown.shutterwordbook.Activity.StartActivity;
-import org.androidtown.shutterwordbook.Class.AddWordbookDialog;
-import org.androidtown.shutterwordbook.Class.WordbookListDialog;
+import org.androidtown.shutterwordbook.Class.DialogWordbookList;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
 
@@ -47,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class DictionaryFragment extends Fragment implements View.OnClickListener, TextToSpeech.OnInitListener {
@@ -111,8 +104,12 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
+
         View rootView =  inflater.inflate(R.layout.fragment_dictionary, container, false);
 //
+
+
 
         // 레이아웃 연결
         buttonCamera = (Button) rootView.findViewById(R.id.button_camera);
@@ -535,8 +532,8 @@ public class DictionaryFragment extends Fragment implements View.OnClickListener
     /* 기존의 단어장 리스트 보여주기  */
     public void showWordbookList(int wordId){
 
-        WordbookListDialog wordbookListDialog = new WordbookListDialog(getActivity(), wordId);
-        wordbookListDialog.show();
+        DialogWordbookList dialogWordbookList = new DialogWordbookList(getActivity(), wordId);
+        dialogWordbookList.show();
     }
 
     /* End of showWordbookList() */

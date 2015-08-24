@@ -5,27 +5,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.androidtown.shutterwordbook.Activity.MainActivity;
-import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
-import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 import org.androidtown.shutterwordbook.R;
-
-import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 
 /**
  * Created by ehye on 2015-08-08.
  */
-public class AddWordbookDialog extends Dialog implements DialogInterface.OnClickListener, View.OnClickListener {
+public class DialogAddWordbook extends Dialog implements DialogInterface.OnClickListener, View.OnClickListener {
 
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper = new DictionaryOpenHelper(getContext());
@@ -38,7 +30,7 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
     private OnDismissListener onDismissListener = null;
 
 
-    public AddWordbookDialog(Context context, int wordId){
+    public DialogAddWordbook(Context context, int wordId){
         super(context);
 
         this.wordId = wordId;
@@ -77,13 +69,13 @@ public class AddWordbookDialog extends Dialog implements DialogInterface.OnClick
 
             if(wordId != 0) {
                 //단어장 추가가 이루어지면 다시 단어장 리스트를 보여주는 다이얼로그 호출
-                WordbookListDialog wordbookListDialog = new WordbookListDialog(getContext(), wordId);
-                wordbookListDialog.show();
+                DialogWordbookList dialogWordbookList = new DialogWordbookList(getContext(), wordId);
+                dialogWordbookList.show();
                 dismiss();
             }
             else {
                 if(onDismissListener != null){
-                    onDismissListener.onDismiss(AddWordbookDialog.this);
+                    onDismissListener.onDismiss(DialogAddWordbook.this);
                 }
                 dismiss();
             }

@@ -15,11 +15,11 @@ import java.util.ArrayList;
  * Created by ehye on 2015-08-07.
  */
 
-public class DataAdapter extends ArrayAdapter<ListViewItem> {
+public class AdapterWordbookContent extends ArrayAdapter<ItemWordbookContent> {
     // 레이아웃 XML을 읽어들이기 위한 객체
     public LayoutInflater mInflater;
 
-    public DataAdapter(Context context, ArrayList<ListViewItem> object) {
+    public AdapterWordbookContent(Context context, ArrayList<ItemWordbookContent> object) {
 
         // 상위 클래스의 초기화 과정
         // context, 0, 자료구조
@@ -34,12 +34,12 @@ public class DataAdapter extends ArrayAdapter<ListViewItem> {
         View view = null;
         // 현재 리스트의 하나의 항목에 보일 컨트롤 얻기
         if (v == null) {
-            view = mInflater.inflate(R.layout.listview_custom, null);
+            view = mInflater.inflate(R.layout.item_wordbookcontent, null);
         } else {
             view = v;
         }
         // 자료를 받음
-        final ListViewItem data = this.getItem(position);
+        final ItemWordbookContent data = this.getItem(position);
 
         if(data != null){
             // 화면 출력

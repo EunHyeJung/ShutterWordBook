@@ -1,5 +1,6 @@
 package org.androidtown.shutterwordbook.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,24 +9,31 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
-import org.androidtown.shutterwordbook.Class.DataAdapter;
-import org.androidtown.shutterwordbook.Class.ListViewItem;
+import org.androidtown.shutterwordbook.Class.AdapterWordbookContent;
+import org.androidtown.shutterwordbook.Class.ItemWordbookContent;
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
 
 import org.androidtown.shutterwordbook.R;
 
 import java.util.ArrayList;
 
-public class ContentActivity extends ActionBarActivity {
+public class ContentActivity extends Activity {
     //
     private ListView listViewContent;
-    private ArrayList<ListViewItem> data;
+    private ArrayList<ItemWordbookContent> data;
+
+
+    private Button buttonAddWord;
+
 
     // 데이터를 연결할 Adapter
-    DataAdapter dataAdapter;
+    AdapterWordbookContent adapterWordbookContent;
 
     //
 
@@ -44,16 +52,20 @@ public class ContentActivity extends ActionBarActivity {
         Intent intent = getIntent();
         name = intent.getExtras().getString("wordbookName");
 
+        TextView title = (TextView) findViewById(R.id.textView_title);
+        title.setText(name);
 
-        data = new ArrayList<ListViewItem>();
+        data = new ArrayList<ItemWordbookContent>();
         listViewContent = (ListView) findViewById(R.id.listView_content);
-        dataAdapter = new DataAdapter(this, data);
-        listViewContent.setAdapter(dataAdapter);
+        adapterWordbookContent = new AdapterWordbookContent(this, data);
+        listViewContent.setAdapter(adapterWordbookContent);
 
         boolean isOpen = openDictionaryDatabase();
         if (isOpen) {
             showContent();
         }
+
+
 
     }
     /* End of onCreateVeiw() */
@@ -108,7 +120,7 @@ public class ContentActivity extends ActionBarActivity {
                 // 하나의 String 값을 저장하던 것을 ListViewClass의 객체를 저장하던 것으로 변경
                 // ListViewClass 객체는 생성자에 리스트 표시
 
-                dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
+                adapterWordbookContent.add(new ItemWordbookContent(getApplicationContext(), word, mean));
 
             } catch(Exception e){
                 System.out.println("DictionaryDatabase 에러 "+e.toString());

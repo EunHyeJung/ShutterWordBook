@@ -5,7 +5,23 @@
         <!-- Customize your theme here. -->
       <item name="android:itemBackground">@color/color_white</item>
         <item name="android:itemTextAppearance">@color/color_background</item>
+
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabStyle">@style/MyActionBarTab</item>
+     <item name="android:actionBarSize">300dp</item>
+
     </style>
 
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:minHeight">300dp</item>
+        <item name="android:background">@color/color_deepblue </item>
+</style>
+
+    <style name="MyActionBarTab"
+        parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:height">300dp</item>
+        <item name="android:background">@color/color_deepblue </item>
+    </style>
 
 </resources>
