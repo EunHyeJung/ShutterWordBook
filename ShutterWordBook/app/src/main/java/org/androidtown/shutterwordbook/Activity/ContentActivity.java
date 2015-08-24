@@ -64,6 +64,9 @@ public class ContentActivity extends Activity {
         if (isOpen) {
             showContent();
         }
+
+
+
     }
     /* End of onCreateVeiw() */
 
