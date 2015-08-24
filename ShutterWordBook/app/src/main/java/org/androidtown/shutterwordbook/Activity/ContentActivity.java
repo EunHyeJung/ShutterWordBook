@@ -70,14 +70,18 @@ public class ContentActivity extends ActionBarActivity {
     public void showContent() {
         try {
             dictionaryDatabase = dbHelper.getReadableDatabase();
-            String sql = "SELECT  word_id from " + name;
+            String sql = "SELECT word, meaning FROM Dictionary, '" + name + "' WHERE '" + name + "'.word_id = Dictionary._id";
             Cursor cursor = dictionaryDatabase.rawQuery(sql, null);
-            //  cursor.moveToFirst();
 
-            while (cursor.moveToNext()) {
-                int wordId = cursor.getInt(0);
-                search(wordId);
+            Log.i("content_", sql);
+
+            Log.i("content_size", cursor.getCount() + "");
+            while(cursor.moveToNext()) {
+                String word = cursor.getString(0);
+                String mean = cursor.getString(1);
+                dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
             }
+
             if (cursor != null)
                 cursor.close();
 
@@ -87,37 +91,6 @@ public class ContentActivity extends ActionBarActivity {
 
     }
     /* End of ShowContent */
-
-
-
-
-    //
-    public void search(int wordId){
-            try {
-                dictionaryDatabase = dbHelper.getReadableDatabase();
-
-                Cursor cursor;
-
-                String sql = "SELECT * from Dictionary where _id like " +wordId;
-                cursor = dictionaryDatabase.rawQuery(sql, null);
-                cursor.moveToFirst();
-                String word = cursor.getString(1);
-                String mean = cursor.getString(2);
-
-                // DataAdapter를 통해서 Arraylist에 자료 저장
-                // 하나의 String 값을 저장하던 것을 ListViewClass의 객체를 저장하던 것으로 변경
-                // ListViewClass 객체는 생성자에 리스트 표시
-
-                dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
-
-            } catch(Exception e){
-                System.out.println("DictionaryDatabase 에러 "+e.toString());
-            }
-
-
-
-    }
-
 
 
     @Override

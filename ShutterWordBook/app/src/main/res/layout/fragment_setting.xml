@@ -36,6 +36,14 @@
 
     </LinearLayout>
 
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lockscreen"
+            android:id="@+id/button_setting_lock"
+            android:layout_gravity="center_horizontal" />
+
         <Button
             android:layout_width="250dp"
             android:layout_height="50dp"

@@ -2,20 +2,22 @@ package org.androidtown.shutterwordbook.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
+import org.androidtown.shutterwordbook.Helper.ScreenService;
 import org.androidtown.shutterwordbook.R;
 
 import java.util.ArrayList;
@@ -27,16 +29,26 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
     private Button buttonShow;
     private Button buttonNext;
     private Button buttonPrevious;
+    private Button buttonOnOff;
 
     private TextView textWordbookName;
     private TextView textWord;
     private TextView textWordMean;
     private TextView textIndex;
 
-
     // DB관련
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper;
+
+    final ArrayList<String> words = new ArrayList<String>();
+    final ArrayList<String> meaning = new ArrayList<String>();
+
+    int ids[];
+    String names[];
+    boolean[] id_check;
+
+    int wordbookNum;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +67,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         buttonShow = (Button) findViewById(R.id.button_lock_show);
         buttonNext = (Button) findViewById(R.id.button_lock_next);
         buttonPrevious = (Button) findViewById(R.id.button_lock_previous);
+        buttonOnOff = (Button) findViewById(R.id.button_lock_onoff);
 
         textWordbookName = (TextView) findViewById(R.id.textView_lock_wordbook_name);
         textWord = (TextView) findViewById(R.id.textView_lock_word);
@@ -68,6 +81,38 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         // listener 정의
         buttonOk.setOnClickListener(this);
         buttonSelect.setOnClickListener(this);
+        buttonOnOff.setOnClickListener(this);
+
+
+        // default setting
+        db = mHelper.getReadableDatabase();
+        Cursor cursor;
+        wordbookNum = 0;
+
+        // get data from database
+        String sql = "select * from WordbookInfo";
+        cursor = db.rawQuery(sql, null);
+        wordbookNum = cursor.getCount();
+
+        try {
+            if (wordbookNum != 0) {
+                ids = new int[wordbookNum];
+                names = new String[wordbookNum];
+                id_check = new boolean[wordbookNum];
+
+                int index = 0;
+                while (cursor.moveToNext()) {
+                    ids[index] = cursor.getInt(0);
+                    names[index] = cursor.getString(1);
+                    id_check[index] = false;
+                    index++;
+                }
+            }
+            setWordbookInfo(0);
+
+        } catch (Exception e) {
+            Log.e("mmlock2", e.toString());
+        }
     }
 
     @Override
@@ -81,7 +126,50 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
                 //popup
                 showWordbookInfo();
                 break;
+            case R.id.button_lock_onoff:
+                onoff();
+                break;
         }
+    }
+
+    private void onoff() {
+        // Dialog setting
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.create();
+        builder.setTitle("잠금화면 설정을 해제하시겠습니까?");
+
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Log.i("mmlock", "onclick");
+                // 단어장 선택 후 확인 버튼 누를 때
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    SharedPreferences pref = getSharedPreferences("lockscreen", Context.MODE_PRIVATE);
+                    // getSharedPreference는 Activity에서만 호출이 가능하기 때문에 getActivity()부터 호출해야한다
+
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("lockOn", false);
+                    editor.commit();
+
+                    // lockscreen service 중지
+                    Intent intent = new Intent(LockScreenActivity.this, ScreenService.class);
+                    stopService(intent);
+
+                    finish();
+                }
+
+                // 취소 버튼 누를 때
+                else if (which == DialogInterface.BUTTON_NEUTRAL) {
+                    dialog.dismiss();
+                }
+
+            }
+        };
+        builder.setPositiveButton("확인", listener);
+        builder.setNeutralButton("취소", listener);
+        builder.setCancelable(true);
+        builder.create().show();
     }
 
     /*
@@ -90,40 +178,10 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
     * */
     private void showWordbookInfo() {
 
-        // open database
-        db = mHelper.getReadableDatabase();
-        Cursor cursor;
-
-        // get data from database
-        String sql = "select * from WordbookInfo";
-        cursor = db.rawQuery(sql, null);
-
-        int ids_temp[] = {};
-        String names_temp[] = {};
-        int index = 0;
-        final boolean[] id_check = new boolean[cursor.getCount()];
-        final int wordBookNum = cursor.getCount();
-        Log.i("mmlock", "count : " + wordBookNum);
-
-        if (wordBookNum == 0) {
+        if (wordbookNum == 0) {
             Toast.makeText(this, "단어장이 존재하지 않습니다", Toast.LENGTH_LONG).show();
+            return;
         } else {
-            // set list
-            ids_temp = new int[wordBookNum];
-            names_temp = new String[wordBookNum];
-
-            while (cursor.moveToNext()) {
-                ids_temp[index] = cursor.getInt(0);
-                names_temp[index] = cursor.getString(1);
-                id_check[index] = false;
-
-                Log.i("mmlock", "id:" + Integer.toString(ids_temp[index]));
-                Log.i("mmlock", "name:" + names_temp[index]);
-                index++;
-            }
-
-            final int ids[] = ids_temp;
-            final String names[] = names_temp;
 
             // Dialog setting
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -134,8 +192,6 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 
         /* single choice */
 
-            final ArrayList<String> words = new ArrayList<String>();
-            final ArrayList<String> meaning = new ArrayList<String>();
 
             builder.setSingleChoiceItems(names, 0, null);
 
@@ -145,52 +201,58 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 
                     Log.i("mmlock", "onclick");
                     // 단어장 선택 후 확인 버튼 누를 때
-                    if (which == DialogInterface.BUTTON_POSITIVE) {
-
-                        int idx_select = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                        int wordbook_id = ids[idx_select];
-                        String wordbook_name = names[idx_select];
-                        textWordbookName.setText(wordbook_name);
-
-                        Log.i("mmlock", "id:" + wordbook_id);
-//select word,meaning from Wordbook,Dictionary where Wordbook.wordbook_id = 1 and Wordbook.word_id = Dictionary._id
-
-                        String findWordQuery = "select word, meaning from Dictionary, " + wordbook_name+ " where book_id = '"
-                                + wordbook_id + "' and Dictionary._id = word_id;";
-
-
-                        Log.i("mmlock", findWordQuery);
-                        Cursor cursor2 = db.rawQuery(findWordQuery, null);
-                        int index = 0;
-                        words.clear();
-                        meaning.clear();
-
-                        int wordCount = cursor2.getCount();
-                        Log.i("mmlock", "wordCount:" + wordCount);
-
-                        if(wordCount != 0) {
-                            while (cursor2.moveToNext()) {
-                                words.add(index, cursor2.getString(0));
-                                meaning.add(index, cursor2.getString(1));
-                                index++;
-                            }
-                            dialog.dismiss();
-                            showWords(words, meaning);
-                        } else { // 저장된 단어가 없을 때
-                            Toast.makeText(LockScreenActivity.this, "저장된 단어가 없습니다.", Toast.LENGTH_SHORT).show();
+                    try {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            int idx_select = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                            setWordbookInfo(idx_select);
                         }
-                    }
-                    // 취소 버튼 누를 때
-                    else if (which == DialogInterface.BUTTON_NEUTRAL) {
-                        dialog.dismiss();
+                        // 취소 버튼 누를 때
+                        else if (which == DialogInterface.BUTTON_NEUTRAL) {
+                            dialog.dismiss();
+                        }
+                    } catch (Exception e) {
+                        Log.e("mmlock", e.toString());
                     }
                 }
             };
-
             builder.setPositiveButton("확인", listener);
             builder.setNeutralButton("취소", listener);
             builder.setCancelable(true);
             builder.create().show();
+        }
+    }
+    //   }
+
+    private void setWordbookInfo(int idx_select) {
+
+        int wordbook_id = ids[idx_select];
+        String wordbook_name = names[idx_select];
+        textWordbookName.setText(wordbook_name);
+
+        Log.i("mmlock", "id:" + wordbook_id);
+//select word,meaning from Wordbook,Dictionary where Wordbook.wordbook_id = 1 and Wordbook.word_id = Dictionary._id
+
+        String findWordQuery = "select word, meaning from Dictionary, '" + wordbook_name + "' where book_id = '"
+                + wordbook_id + "' and Dictionary._id = word_id;";
+
+        Log.i("mmlock", findWordQuery);
+        Cursor cursor2 = db.rawQuery(findWordQuery, null);
+        int index = 0;
+        words.clear();
+        meaning.clear();
+
+        int wordCount = cursor2.getCount();
+        Log.i("mmlock", "wordCount:" + wordCount);
+
+        if (wordCount != 0) {
+            while (cursor2.moveToNext()) {
+                words.add(index, cursor2.getString(0));
+                meaning.add(index, cursor2.getString(1));
+                index++;
+            }
+            showWords(words, meaning);
+        } else { // 저장된 단어가 없을 때
+            Toast.makeText(LockScreenActivity.this, "저장된 단어가 없습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -210,7 +272,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         buttonShow.setVisibility(View.VISIBLE);
         buttonShow.setText("▼ 단어 의미 보기 ▼");
         textWord.setVisibility(View.VISIBLE);
-        textIndex.setText((index+1) + " / " + count);
+        textIndex.setText((index + 1) + " / " + count);
 
         textWord.setText(words.get(index));
         textWordMean.setText(meaning.get(index));
@@ -218,9 +280,10 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         // button
         buttonShow.setOnClickListener(new View.OnClickListener() {
             boolean show_temp = false;
+
             @Override
             public void onClick(View v) {
-                if(show_temp == false) {
+                if (show_temp == false) {
                     textWordMean.setVisibility(View.VISIBLE);
                     show_temp = true;
                     buttonShow.setText("▲ 단어 의미 숨기기 ▲");
@@ -234,9 +297,10 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 
         buttonNext.setOnClickListener(new View.OnClickListener() {
             int index_temp = index;
+
             @Override
             public void onClick(View v) {
-                if(index_temp == count-1) {
+                if (index_temp == count - 1) {
                     index_temp = 0;
                 } else {
                     index_temp++;
@@ -249,17 +313,18 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
 
         buttonPrevious.setOnClickListener(new View.OnClickListener() {
             int index_temp = index;
+
             @Override
             public void onClick(View v) {
                 try {
-                    if(index_temp == 0) {
-                        index_temp = count-1;
+                    if (index_temp == 0) {
+                        index_temp = count - 1;
                     } else {
                         index_temp--;
                     }
                     textWord.setText(words.get(index_temp));
                     textWordMean.setText(meaning.get(index_temp));
-                    textIndex.setText((index_temp+1) + " / " + count);
+                    textIndex.setText((index_temp + 1) + " / " + count);
                 } catch (Exception e) {
                     Log.e("lock_error", e.toString());
                 }

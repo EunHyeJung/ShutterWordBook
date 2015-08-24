@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import org.androidtown.shutterwordbook.Helper.DictionaryOpenHelper;
+import org.androidtown.shutterwordbook.Helper.ScreenService;
 import org.androidtown.shutterwordbook.R;
 
 import java.util.ArrayList;
@@ -33,9 +34,17 @@ public class StartActivity extends FragmentActivity {
 
         Thread thread1 = new backgroundThread();
         thread1.start();
+
+        // lockscreen
+        SharedPreferences pref = getSharedPreferences("lockscreen", Context.MODE_PRIVATE);
+        // lockscreen service 시작
+        boolean lockScreenSetting = pref.getBoolean("lockOn", false); // default : false
+
+        if (lockScreenSetting == true) {
+            Intent intent = new Intent(StartActivity.this, ScreenService.class);
+            startService(intent);
+        }
     }
-
-
 
     class backgroundThread extends Thread{
         public void run() {

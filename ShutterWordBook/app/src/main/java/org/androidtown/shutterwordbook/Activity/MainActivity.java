@@ -104,7 +104,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -241,7 +240,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
          WordbookFragment와 통신
     *      ContentActivity에 보고자 하는 단어장의 이름을 전달하여
     *      ContentActivity에서 해당하는 단어장을 열어서 출력하도록 한다.
-    *
 */
     @Override
     public void showWordbook(String wordbookName){
@@ -249,6 +247,4 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         intent.putExtra("wordbookName", wordbookName);
         startActivity(intent);
     }
-
-
 }

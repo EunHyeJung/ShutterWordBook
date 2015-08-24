@@ -28,6 +28,8 @@ public class SettingFragment extends Fragment {
     private boolean lockScreenSetting;
     private SharedPreferences pref;
 
+    boolean test = false;
+
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -71,14 +73,31 @@ public class SettingFragment extends Fragment {
                     editor.putBoolean("lockOn", false);
                     editor.commit();
 
-                    // lockscreen service 시작
+                    // lockscreen service 중지
                     Intent intent = new Intent(getActivity(), ScreenService.class);
                     getActivity().stopService(intent);
                 }
-                Toast.makeText(getActivity(), isChecked + "", Toast.LENGTH_SHORT).show();
-
+                if(test) {
+                    Toast.makeText(getActivity(), isChecked + "", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        //// test용
+        Button buttonLockScreen = (Button) rootView.findViewById(R.id.button_setting_lock);
+        if(test) {
+            buttonLockScreen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), LockScreenActivity.class);
+                    startActivity(intent);
+                    }
+            });
+
+        } else {
+            buttonLockScreen.setVisibility(View.GONE);
+        }
+
         return rootView;
     }
 }

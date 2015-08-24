@@ -153,7 +153,7 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
             db.execSQL(query);
         }catch(Exception ex){
             System.out.println("drop Table 에서는 뭐가 문제 ? : "+ex);
-            Log.e("error", "Excpetion in Drop wordbook table  SQL", ex);
+            Log.e("myerror", "Excpetion in Drop wordbook table  SQL" +  ex.toString());
         }
 
     }
@@ -162,13 +162,13 @@ public class DictionaryOpenHelper extends SQLiteOpenHelper {
     // 단어장에 단어 추가
     public void  insertWord(String wordbookName, int book_id, int word_id){
         SQLiteDatabase db = getWritableDatabase();
-         String query  = "insert into "+wordbookName+" values("+ book_id + ", " + word_id + ");";
+         String query  = "insert into '"+wordbookName+"' values("+ book_id + ", " + word_id + ");";
 
         try{
                 db.execSQL(query);
 
         }catch(Exception ex){
-            Log.e("error", "Excpetion in insert SQL", ex);
+            Log.e("myerror", "Excpetion in Drop wordbook table  SQL" +  ex.toString());
         }
     }
 
