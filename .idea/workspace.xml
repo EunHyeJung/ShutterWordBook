@@ -2,11 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e1c4d46b-4092-4d81-8e2f-747d651b22d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Class/AddWordbookDialog.java" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Class/AddWordbookDialog.java" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\AddWordbookDialog.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\CustomAdapter1.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\DataAdapter.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\ListViewItem.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\WordbookListDialog.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\ehye\Documents\ShutterWordBook\ShutterWordBook\app\src\main\java\org\androidtown\shutterwordbook\Class\WordbookListView.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/bundles/release/classes.jar" afterPath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/bundles/release/classes.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/outputs/aar/tess-two-release.aar" afterPath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/outputs/aar/tess-two-release.aar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Activity/ContentActivity.java" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Activity/ContentActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Fragment/DictionaryFragment.java" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Fragment/DictionaryFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Activity/MainActivity.java" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Activity/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/ShutterWordBook.iml" afterPath="$PROJECT_DIR$/ShutterWordBook/ShutterWordBook.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Fragment/WordbookFragment.java" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/java/org/androidtown/shutterwordbook/Fragment/WordbookFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/src/main/res/layout/fragment_wordbook.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/app/src/main/res/layout/fragment_wordbook.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/app/app.iml" afterPath="$PROJECT_DIR$/ShutterWordBook/app/app.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/.idea/compiler.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/.idea/gradle.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/.idea/gradle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/incremental/mergeAssets/release/merger.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/incremental/mergeAssets/release/merger.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/incremental/packageResources/release/merger.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/build/intermediates/incremental/packageResources/release/merger.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/.idea/misc.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/.idea/modules.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/tess-two.iml" afterPath="$PROJECT_DIR$/ShutterWordBook/libraries/tess-two/tess-two.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShutterWordBook/.idea/vcs.xml" afterPath="$PROJECT_DIR$/ShutterWordBook/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ShutterWordBook.iws" />
@@ -32,10 +49,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1552" />
-    <option name="height" value="842" />
+    <option name="x" value="494" />
+    <option name="y" value="119" />
+    <option name="width" value="1534" />
+    <option name="height" value="824" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -64,6 +81,10 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -184,10 +205,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="AndroidView">
-        <subPane />
-      </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -297,7 +314,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1552" height="842" extended-state="6" />
+    <frame x="494" y="119" width="1534" height="824" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -312,7 +329,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24967062" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />

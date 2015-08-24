@@ -2,25 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_lightblue"
-   android:orientation="vertical"
-    tools:context="org.androidtown.shutterwordbook.Activity.ContentActivity">
+    android:orientation="vertical"
+    tools:context="org.androidtown.shutterwordbook.Activity.DeleteWordActivity">
 
-<TextView
-    android:id="@+id/textView_title"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@color/color_background"
-    android:textColor="@color/color_white"
-    android:textSize="20dp"
-    android:gravity="center"
-    />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="right"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
         >
 
 
@@ -30,8 +21,8 @@
             android:layout_width="120dp"
             android:layout_height="30dp"
             android:text="- 단어 삭제"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
             android:textColor="@color/color_white"
             android:background="@color/color_deepblue"
             />

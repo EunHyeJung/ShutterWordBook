@@ -2,26 +2,29 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
+    android:id="@+id/frag_wordbook"
     tools:context="org.androidtown.shutterwordbook.Fragment.WordbookFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:layout_width="340dp"
+         android:layout_width="340dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:background="@color/color_lightblue"
+
         >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+           android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
+
             >
 
             <Button
@@ -46,16 +49,17 @@
                 android:background="@color/color_deepblue"
                 />
             </LinearLayout>
-
+=
         <!-- DB 파일의 내용을 출력할 리스트뷰 - -->
         <ListView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/listView_wordbooks"
-            android:layout_gravity="center_horizontal"
             android:background="#FFFFFF"
+            android:layout_gravity="center_horizontal"
             android:choiceMode="singleChoice"
             />
-    </LinearLayout>
+
+        </LinearLayout>
 
 </FrameLayout>

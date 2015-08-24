@@ -1,16 +1,12 @@
 package org.androidtown.shutterwordbook.Activity;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.support.v4.view.PagerAdapter;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,15 +15,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TabHost;
 
-import org.androidtown.shutterwordbook.Class.AddWordbookDialog;
+import org.androidtown.shutterwordbook.Fragment.DeleteWordbookFragment;
 import org.androidtown.shutterwordbook.Fragment.DictionaryFragment;
 import org.androidtown.shutterwordbook.Fragment.SettingFragment;
 
@@ -35,7 +28,8 @@ import org.androidtown.shutterwordbook.Fragment.WordbookFragment;
 import org.androidtown.shutterwordbook.R;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, WordbookFragment.AccidentListener , DialogInterface.OnDismissListener  {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, WordbookFragment.AccidentListener , DialogInterface.OnDismissListener
+                                                                           {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -65,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        // actionBar.setDisplayShowTitleEnabled(false);                // 상단 타이틀바 없앰.
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -81,16 +76,29 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
-
-
-                Fragment fragment = ((SectionsPagerAdapter )mViewPager.getAdapter()).getFragment(position);
-                 if(position == 1 && fragment != null){
+                Fragment fragment = ((SectionsPagerAdapter) mViewPager.getAdapter()).getFragment(position);
+                if (position == 1 && fragment != null) {
                     fragment.onResume();
-              }
+
+                }
 
             }
         });
 
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText(mSectionsPagerAdapter.getPageTitle(0))
+                        .setTabListener(this));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText(mSectionsPagerAdapter.getPageTitle(1))
+
+                        .setTabListener(this));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText(mSectionsPagerAdapter.getPageTitle(2))
+                        .setTabListener(this));
+     /*   //
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
@@ -102,29 +110,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-    }
 
+<<<<<<< HEAD
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+=======
+        //*/
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -147,10 +144,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onDismiss(DialogInterface dialog) {
         Fragment fragment = ((SectionsPagerAdapter )mViewPager.getAdapter()).getFragment(1);
+
+        System.out.println("다이얼로그 dismiss 호출 확인");
         if(fragment != null){
             fragment.onResume();
         }
     }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -185,6 +185,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 case 2:
                     currentFragment = new SettingFragment();
                     break;
+
             }
 
             return currentFragment;
@@ -216,6 +217,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             if(tag == null)
                 return null;
+
             return mFragmentManager.findFragmentByTag(tag);
         }
 

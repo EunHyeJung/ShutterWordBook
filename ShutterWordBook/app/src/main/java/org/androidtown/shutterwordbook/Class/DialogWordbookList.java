@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by ehye on 2015-08-10.
  */
-public class WordbookListDialog extends Dialog implements DialogInterface.OnClickListener, View.OnClickListener  {
+public class DialogWordbookList extends Dialog implements DialogInterface.OnClickListener, View.OnClickListener  {
 
 
     private SQLiteDatabase db;
@@ -31,7 +30,7 @@ public class WordbookListDialog extends Dialog implements DialogInterface.OnClic
 
 
 
-    public WordbookListDialog(Context context, final int  wordId) {           // wordID : 추가할 단어 ID
+    public DialogWordbookList(Context context, final int wordId) {           // wordID : 추가할 단어 ID
         super(context);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -65,8 +64,8 @@ public class WordbookListDialog extends Dialog implements DialogInterface.OnClic
             @Override
             public void onClick(View v) {
                 // 새로운 단어장 생성하는 다이얼로그 호출
-                AddWordbookDialog addWordbookDialog = new AddWordbookDialog(getContext(), wordId);
-                addWordbookDialog.show();
+                DialogAddWordbook dialogAddWordbook = new DialogAddWordbook(getContext(), wordId);
+                dialogAddWordbook.show();
                 dismiss();
 
             }
