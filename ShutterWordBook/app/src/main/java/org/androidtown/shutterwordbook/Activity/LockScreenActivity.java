@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,8 +22,9 @@ import org.androidtown.shutterwordbook.Helper.ScreenService;
 import org.androidtown.shutterwordbook.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class LockScreenActivity extends Activity implements View.OnClickListener {
+public class LockScreenActivity extends Activity implements View.OnClickListener, TextToSpeech.OnInitListener {
 
     private Button buttonOk;
     private Button buttonSelect;
@@ -30,6 +32,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
     private Button buttonNext;
     private Button buttonPrevious;
     private Button buttonOnOff;
+    private Button buttonSpeak;
 
     private TextView textWordbookName;
     private TextView textWord;
@@ -39,6 +42,11 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
     // DB관련
     private SQLiteDatabase db;
     DictionaryOpenHelper mHelper;
+
+    // 발음
+    TextToSpeech tts;
+    boolean ttsActive = false;
+
 
     final ArrayList<String> words = new ArrayList<String>();
     final ArrayList<String> meaning = new ArrayList<String>();
@@ -68,6 +76,7 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         buttonNext = (Button) findViewById(R.id.button_lock_next);
         buttonPrevious = (Button) findViewById(R.id.button_lock_previous);
         buttonOnOff = (Button) findViewById(R.id.button_lock_onoff);
+        buttonSpeak = (Button) findViewById(R.id.button_lock_speak);
 
         textWordbookName = (TextView) findViewById(R.id.textView_lock_wordbook_name);
         textWord = (TextView) findViewById(R.id.textView_lock_word);
@@ -82,6 +91,10 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
         buttonOk.setOnClickListener(this);
         buttonSelect.setOnClickListener(this);
         buttonOnOff.setOnClickListener(this);
+        buttonSpeak.setOnClickListener(this);
+
+        // tts
+        tts = new TextToSpeech(LockScreenActivity.this, this);
 
 
         // default setting
@@ -128,6 +141,9 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.button_lock_onoff:
                 onoff();
+                break;
+            case R.id.button_lock_speak:
+                speak();
                 break;
         }
     }
@@ -330,6 +346,62 @@ public class LockScreenActivity extends Activity implements View.OnClickListener
                 }
             }
         });
+    }
+
+    // tts
+    public void speak() {
+
+        try {
+            // 읽을 단어를 가져온다. 오른쪽 화면에서 가져옴.
+            String toSpeak = textWord.getText().toString();
+            Log.i("mmlock", toSpeak);
+
+            // queue를 비우고 지정한 단어를 발음을 하게 한다
+            tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+
+        } catch (Exception e) {
+            Log.e("mmlock", e.toString() + " error in speak");
+        }
+    }
+
+    // tts listener
+    @Override
+    public void onInit(int status) {
+
+        // tts가 가능한 경우
+        if(status == TextToSpeech.SUCCESS) {
+
+            String toSpeak = textWord.getText().toString();
+
+            int result = tts.setLanguage(Locale.US); // 언어설정. 미국, 영국,호주 등 다양한 발음 제공 가능할 듯
+            // setPitch() - 발음의 높낮이
+            // setSpeechRate() - 발음 속도
+
+            // 데이터가 없거나 지원하지 않는 경우
+            if (result == TextToSpeech.LANG_MISSING_DATA ||
+                    result == TextToSpeech.LANG_NOT_SUPPORTED) {
+
+                Toast.makeText(LockScreenActivity.this, R.string.text_tts_error,Toast.LENGTH_SHORT).show();
+            }
+            else {
+                buttonSpeak.setEnabled(true);
+            }
+        }
+        else {
+            Toast.makeText(LockScreenActivity.this, R.string.text_tts_error,Toast.LENGTH_SHORT).show();
+            buttonSpeak.setEnabled(false);
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        // tts를 꼭 종료시켜야함!!!
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }
             /* multichoice
