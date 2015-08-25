@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '19.1.0'
 
     defaultConfig {
         applicationId "org.androidtown.shutterwordbook"
@@ -23,4 +23,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':tess-two')
+
+
 }
