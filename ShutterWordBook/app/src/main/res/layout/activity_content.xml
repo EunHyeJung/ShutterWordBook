@@ -1,6 +1,8 @@
+
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_lightblue"
     android:orientation="vertical"
@@ -11,47 +13,51 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/color_background"
-        android:gravity="center"
         android:textColor="@color/color_white"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:gravity="center"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_gravity="left"
+        >
 
         <Button
             android:id="@+id/button_send_wordbook"
             android:layout_width="120dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="40dp"
-            android:background="@color/color_deepblue"
             android:text="내보내기"
-            android:textColor="@color/color_white" />
-
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/color_white"
+            android:background="@color/color_deepblue"
+            />
 
         <Button
             android:id="@+id/button_deleteword"
             android:layout_width="120dp"
             android:layout_height="30dp"
-            android:layout_gravity="right"
-            android:layout_marginLeft="60dp"
-            android:background="@color/color_deepblue"
             android:text="- 단어 삭제"
-            android:textColor="@color/color_white" />
+            android:layout_marginLeft="90dp"
+            android:textColor="@color/color_white"
+            android:background="@color/color_deepblue"
+            />
 
     </LinearLayout>
-
     <ListView
         android:id="@+id/listView_content"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
+        android:background="@color/color_white"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:background="@color/color_white"
         android:divider="#EFEFEF"
-        android:dividerHeight="2dp"></ListView>
+        android:dividerHeight="2dp"
+        ></ListView>
+
 
 
 </LinearLayout>

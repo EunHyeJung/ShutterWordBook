@@ -1,3 +1,5 @@
+
+
 package org.androidtown.shutterwordbook.Activity;
 
 import android.app.Activity;
@@ -29,7 +31,6 @@ public class ContentActivity extends Activity {
     private ArrayList<ItemWordbookContent> data;
 
 
-    private Button buttonAddWord;
 
 
     // 데이터를 연결할 Adapter
@@ -60,13 +61,13 @@ public class ContentActivity extends Activity {
         adapterWordbookContent = new AdapterWordbookContent(this, data);
         listViewContent.setAdapter(adapterWordbookContent);
 
+        Button buttonSendWordbook = (Button) findViewById(R.id.button_send_wordbook);
+        Button  buttonDeleteWord = (Button) findViewById(R.id.button_send_wordbook);
+
         boolean isOpen = openDictionaryDatabase();
         if (isOpen) {
             showContent();
         }
-
-
-
     }
     /* End of onCreateVeiw() */
 
@@ -91,7 +92,7 @@ public class ContentActivity extends Activity {
             while(cursor.moveToNext()) {
                 String word = cursor.getString(0);
                 String mean = cursor.getString(1);
-               // dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
+                // dataAdapter.add(new ListViewItem(getApplicationContext(), word, mean));
                 adapterWordbookContent.add(new ItemWordbookContent(getApplicationContext(), word, mean));
 
             }
